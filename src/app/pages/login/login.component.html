@@ -1,0 +1,66 @@
+<div class="login-container">
+    <mat-card class="login-card">
+    <img
+  src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
+  alt="Google logo"
+  class="google-logo"
+/>
+
+    <h3 class="login-title">Login</h3>
+    <p class="login-subtitle">Use your Google Account</p>
+<form [formGroup]="loginForm">
+  <mat-form-field appearance="outline" class="full-width">
+  <mat-label>Email or phone</mat-label>
+  <input matInput formControlName="email" />
+
+ <mat-error *ngIf="
+  loginForm.get('email')?.invalid &&
+  (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)
+">
+  <ng-container *ngIf="loginForm.get('email')?.hasError('required')">
+    Email or phone is required
+  </ng-container>
+  <ng-container *ngIf="loginForm.get('email')?.hasError('emailOrPhone')">
+    Enter a valid email or 10-digit phone number
+  </ng-container>
+</mat-error>
+
+</mat-form-field>
+
+ 
+
+  <mat-form-field appearance="outline" class="full-width">
+  <mat-label>Password</mat-label>
+  <input matInput type="password" formControlName="password" />
+
+  <mat-error *ngIf="
+    loginForm.get('password')?.invalid &&
+    (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)
+  ">
+    <ng-container *ngIf="loginForm.get('password')?.hasError('required')">
+      Password is required
+    </ng-container>
+    <ng-container *ngIf="loginForm.get('password')?.hasError('minlength')">
+      Password must be at least 8 characters
+    </ng-container>
+    <ng-container *ngIf="loginForm.get('password')?.hasError('pattern')">
+      Must contain uppercase, number & special character
+    </ng-container>
+  </mat-error>
+</mat-form-field>
+<div class="forgot-password">
+  <a href="#">Forgot password?</a>
+</div>
+
+<div class="actions">
+  <a class="link" href="#">Create account</a>
+  <button mat-raised-button color="primary" type="submit">
+    Login
+  </button>
+</div>
+
+</form>
+
+    </mat-card>
+
+</div>
