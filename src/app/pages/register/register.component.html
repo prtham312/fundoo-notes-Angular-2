@@ -1,0 +1,81 @@
+<mat-card class="register-card">
+  
+  <div class="form-container">
+
+    
+    <div class="form-left">
+
+      
+      <div class="logo-title-container">
+        <img
+          src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
+          alt="Google Logo"
+          class="google-logo"
+        />
+        <h2>Create your Google Account</h2>
+      </div>
+
+      
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
+        <!-- Name Fields (First + Last) -->
+        <div class="name-fields">
+          <mat-form-field appearance="outline">
+            <mat-label>First Name</mat-label>
+            <input matInput formControlName="firstName" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Last Name</mat-label>
+            <input matInput formControlName="lastName" />
+          </mat-form-field>
+        </div>
+
+        <!-- Username Field -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Username</mat-label>
+          <input matInput formControlName="username" />
+        <mat-hint>you can use letters, numbers & periods</mat-hint>
+        </mat-form-field>
+        <br><br>
+        <!-- Email Link -->
+        <a class="email-link" href="#">Use my current email instead</a>
+        <br><br>
+        <!-- Password + Confirm Fields -->
+        <div class="password-fields">
+          <mat-form-field appearance="outline">
+            <mat-label>Password</mat-label>
+            <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Confirm</mat-label>
+            <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="confirmPassword" />
+          </mat-form-field>
+        </div>
+
+        <!-- ℹ Password Hint Text -->
+        <div class="full-width-hint">
+          Use 8 or more characters with a mix of letters, numbers & symbols
+        </div>
+
+        <!--  Show Password Toggle -->
+        <mat-checkbox (change)="togglePasswordVisibility()">Show Password</mat-checkbox>
+
+        <!-- Form Footer: Sign In Link + Submit Button -->
+        <div class="actions">
+          <a class="signin-link" routerLink="/login">Sign in instead</a>
+          <button mat-raised-button color="primary" type="submit">Next</button>
+        </div>
+
+      </form>
+    </div>
+
+    <!--  RIGHT SIDE: Image + Caption -->
+    <div class="form-right">
+      <img src="/assets/unnamed.png" alt="Illustration" class="side-image" />
+      <p  class="side-text">One account. All of Google working for you.</p>
+    </div>
+
+  </div>
+</mat-card>
