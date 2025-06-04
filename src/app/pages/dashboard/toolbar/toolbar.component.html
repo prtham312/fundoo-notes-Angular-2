@@ -1,0 +1,61 @@
+<!-- Main Toolbar -->
+<mat-toolbar class="toolbar" color="primary">
+
+  <!-- Left Section: Menu + Logo + App Name -->
+  <div class="left-section">
+    <button mat-icon-button (click)="toggleSidebar()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <img src="assets/google-keep.png" class="logo" alt="logo" />
+    <span class="app-name">Keep</span>
+  </div>
+
+  <!-- Centered Search Bar (Desktop Only) -->
+  <div class="search-container desktop-search">
+    <mat-icon>search</mat-icon>
+    <input matInput placeholder="   Search" />
+  </div>
+
+  <!-- Right Section: Mobile Search + Icons -->
+  <div class="right-section">
+    <!-- Search Icon for Mobile -->
+    <button mat-icon-button class="mobile-search" (click)="mobileSearchOpen = true">
+      <mat-icon>search</mat-icon>
+    </button>
+
+    <!-- Refresh -->
+    <button mat-icon-button (click)="refreshPage()">
+      <mat-icon>refresh</mat-icon>
+    </button>
+
+    <!-- View Toggle -->
+    <button mat-icon-button (click)="toggleView()">
+      <mat-icon fontSet="material-symbols-outlined" >{{ isGrid ? 'view_list' : 'grid_view' }}</mat-icon>
+    </button>
+
+    <!-- Settings -->
+    <button mat-icon-button>
+      <mat-icon fontSet="material-symbols-outlined" fontIcon="settings">settings</mat-icon>
+    </button>
+
+      <span class="right-gap"></span>
+
+
+     <button mat-icon-button>
+    <mat-icon fontSet="material-symbols-outlined" fontIcon="apps">apps</mat-icon>
+  </button>
+
+    <!-- Profile -->
+    <button mat-icon-button><mat-icon>account_circle</mat-icon></button>
+  </div>
+</mat-toolbar>
+<hr>
+
+<!-- Expanded Search Bar (Mobile Only) -->
+<div class="mobile-search-bar" *ngIf="mobileSearchOpen">
+  <mat-icon>search</mat-icon>
+  <input matInput placeholder="Search" />
+  <button mat-icon-button (click)="mobileSearchOpen = false">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
