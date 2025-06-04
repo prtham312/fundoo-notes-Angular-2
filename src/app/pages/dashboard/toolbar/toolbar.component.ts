@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule} from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -21,8 +21,11 @@ refreshPage() {
   location.reload();
 }
 
-toggleSidebar() {
-}
-mobileSearchOpen = false;
+@Output() menuClicked = new EventEmitter<void>()
 
+toggleSidebar() {
+  this.menuClicked.emit();
+}
+
+mobileSearchOpen = false;
 }

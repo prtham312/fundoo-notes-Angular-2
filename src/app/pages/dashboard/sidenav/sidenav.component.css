@@ -1,0 +1,43 @@
+/* Full width when expanded */
+mat-nav-list {
+  width: 100%;
+  padding: 0;
+}
+
+/* Each list item */
+mat-list-item {
+  height: 48px;
+  padding-left: 12px;
+  transition: all 0.2s ease;
+}
+
+/* Icon style */
+mat-icon[matListIcon] {
+  font-size: 24px;
+  margin-right: 16px;
+  color: #5f6368;
+  transition: margin 0.2s ease;
+}
+
+/* Label text */
+span[matLine] {
+  font-size: 16px;
+  color: #202124;
+  transition: opacity 0.2s ease;
+}
+
+/* Collapsed sidenav overrides */
+:host-context(.mat-drawer-collapsed) mat-list-item {
+  justify-content: center;
+  padding-left: 0;
+}
+
+:host-context(.mat-drawer-collapsed) mat-icon[matListIcon] {
+  margin-right: 0;
+}
+
+:host-context(.mat-drawer-collapsed) span[matLine] {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+}
