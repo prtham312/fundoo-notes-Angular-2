@@ -1,11 +1,6 @@
 <mat-card class="register-card">
-  
   <div class="form-container">
-
-    
     <div class="form-left">
-
-      
       <div class="logo-title-container">
         <img
           src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
@@ -15,10 +10,8 @@
         <h2>Create your Google Account</h2>
       </div>
 
-      
       <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-
-        <!-- Name Fields (First + Last) -->
+        <!-- Name Fields -->
         <div class="name-fields">
           <mat-form-field appearance="outline">
             <mat-label>First Name</mat-label>
@@ -35,47 +28,116 @@
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Username</mat-label>
           <input matInput formControlName="username" />
-        <mat-hint>you can use letters, numbers & periods</mat-hint>
+          <mat-hint>You can use letters, numbers & periods</mat-hint>
+          <mat-error
+            *ngIf="
+              registerForm.get('username')?.hasError('required') &&
+              registerForm.get('username')?.touched
+            "
+          >
+            Username is required
+          </mat-error>
+          <mat-error
+            *ngIf="
+              registerForm.get('username')?.hasError('pattern') &&
+              registerForm.get('username')?.touched
+            "
+          >
+            Invalid characters in username
+          </mat-error>
         </mat-form-field>
-        <br><br>
+
+        <br /><br />
+
         <!-- Email Link -->
         <a class="email-link" href="#">Use my current email instead</a>
-        <br><br>
-        <!-- Password + Confirm Fields -->
+        <br /><br />
+
+        <!-- Password Fields -->
         <div class="password-fields">
+          <!-- Password -->
           <mat-form-field appearance="outline">
             <mat-label>Password</mat-label>
-            <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" />
+            <input
+              matInput
+              [type]="hidePassword ? 'password' : 'text'"
+              formControlName="password"
+            />
+            <mat-error
+              *ngIf="
+                registerForm.get('password')?.hasError('required') &&
+                registerForm.get('password')?.touched
+              "
+            >
+              Password is required
+            </mat-error>
+            <mat-error
+              *ngIf="
+                registerForm.get('password')?.hasError('pattern') &&
+                registerForm.get('password')?.touched
+              "
+            >
+              Must include letters, numbers, and be 8+ characters
+            </mat-error>
           </mat-form-field>
 
+          <!-- Confirm Password -->
           <mat-form-field appearance="outline">
             <mat-label>Confirm</mat-label>
-            <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="confirmPassword" />
+            <input
+              matInput
+              [type]="hidePassword ? 'password' : 'text'"
+              formControlName="confirmPassword"
+            />
+            <mat-error
+              *ngIf="
+                registerForm.get('confirmPassword')?.hasError('required') &&
+                registerForm.get('confirmPassword')?.touched
+              "
+            >
+              Please confirm your password
+            </mat-error>
+            <mat-error
+              *ngIf="
+                registerForm.hasError('passwordMismatch') &&
+                registerForm.get('confirmPassword')?.touched
+              "
+            >
+              Passwords do not match
+            </mat-error>
           </mat-form-field>
         </div>
-
-        <!-- ℹ Password Hint Text -->
+        <br />
         <div class="full-width-hint">
           Use 8 or more characters with a mix of letters, numbers & symbols
         </div>
 
-        <!--  Show Password Toggle -->
-        <mat-checkbox (change)="togglePasswordVisibility()">Show Password</mat-checkbox>
+        <mat-checkbox (change)="togglePasswordVisibility()"
+          >Show Password</mat-checkbox
+        >
 
-        <!-- Form Footer: Sign In Link + Submit Button -->
         <div class="actions">
           <a class="signin-link" routerLink="/login">Sign in instead</a>
-          <button mat-raised-button color="primary" type="submit">Next</button>
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="!registerForm.valid"
+          >
+            Next
+          </button>
         </div>
-
       </form>
     </div>
 
-    <!--  RIGHT SIDE: Image + Caption -->
+    <!-- Right Side -->
     <div class="form-right">
-      <img src="/assets/unnamed.png" alt="Illustration" class="side-image" />
-      <p  class="side-text">One account. All of Google working for you.</p>
+      <img
+        src="/assets/unnamed.png"
+        alt="Illustration"
+        class="side-image"
+      />
+      <p class="side-text">One account. All of Google working for you.</p>
     </div>
-
   </div>
 </mat-card>
