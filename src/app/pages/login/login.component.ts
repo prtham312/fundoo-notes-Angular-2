@@ -13,7 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { UserService } from 'src/app/services/user_service/user.service';
 import { HttpService } from 'src/app/services/http-service/http.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 
 function emailOrPhoneValidator() {
@@ -54,7 +54,8 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private user: UserService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private router : Router,
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, emailOrPhoneValidator()]],
@@ -84,6 +85,7 @@ export class LoginComponent {
           this.snackBar.open('Login successful!', 'Close', {
             duration: 3000,
           });
+          this.router.navigate(['/dashboard']);
         },
         error: (err) => {
           console.log(err);
