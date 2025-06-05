@@ -1,24 +1,20 @@
-<mat-sidenav-container class="sidenav-container">
+<app-toolbar (menuClicked)="isSidenavOpen = !isSidenavOpen"></app-toolbar>
 
-  <!-- Sidenav -->
+<mat-sidenav-container class="sidenav-container">
   <mat-sidenav
     mode="side"
-    [opened]="sidenavOpened"
-    [class.mat-drawer-collapsed]="!sidenavOpened"
+    [opened]="true"
+    [class.mat-drawer-collapsed]="!sidenavOpened && !isHovered"
     (mouseenter)="onMouseEnterSidenav()"
     (mouseleave)="onMouseLeaveSidenav()"
+    class="custom-sidenav"
   >
     <app-sidenav></app-sidenav>
   </mat-sidenav>
 
-  <!-- Main content area -->
   <mat-sidenav-content>
-    <app-toolbar (menuClicked)="isSidenavOpen = !isSidenavOpen"></app-toolbar>
-
     <div class="dashboard-content">
-      <!-- Replace with actual routed content later -->
-      <p style="padding: 16px;">Dashboard content goes here</p>
+      <p style="padding: 16px">Notes section</p>
     </div>
   </mat-sidenav-content>
-
 </mat-sidenav-container>

@@ -5,14 +5,15 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { AuthGuardService } from './services/auth-guard/auth-guard.service';
 
 
+
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-{
-  path: 'dashboard',
- component : DashboardComponent,
- canActivate : [AuthGuardService]
-}
 
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
+    canActivate: [AuthGuardService],
+  },
 ];

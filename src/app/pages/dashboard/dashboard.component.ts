@@ -12,7 +12,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent {
-  isSidenavOpen = false;   
+  isSidenavOpen = false;
   isHovered = false;
 
   get sidenavOpened(): boolean {
