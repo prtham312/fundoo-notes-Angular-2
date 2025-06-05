@@ -15,6 +15,7 @@ import { HttpService } from 'src/app/services/http-service/http.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 function emailOrPhoneValidator() {
   return (control: any) => {
@@ -44,18 +45,20 @@ function emailOrPhoneValidator() {
     MatButtonModule,
     RouterModule,
     MatSnackBarModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
   loginForm: FormGroup;
+  isLoading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private user: UserService,
     private snackBar: MatSnackBar,
-    private router : Router,
+    private router: Router
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, emailOrPhoneValidator()]],
@@ -72,6 +75,7 @@ export class LoginComponent {
 
   onLogin() {
     if (this.loginForm.valid) {
+      this.isLoading = true;
       const { email, password } = this.loginForm.value;
       console.log('Login submitted:', email, password);
       let data = {
@@ -80,6 +84,7 @@ export class LoginComponent {
       };
       this.user.login(data).subscribe({
         next: (result: any) => {
+          this.isLoading = false;
           console.log(result);
           localStorage.setItem('token', result.id);
           this.snackBar.open('Login successful!', 'Close', {
@@ -88,6 +93,7 @@ export class LoginComponent {
           this.router.navigate(['/dashboard']);
         },
         error: (err) => {
+          this.isLoading = false;
           console.log(err);
         },
       });

@@ -1,43 +1,66 @@
-/* Full width when expanded */
-mat-nav-list {
+.sidenav-list {
+  padding: 0.5em 0;
   width: 100%;
-  padding: 0;
 }
 
-/* Each list item */
-mat-list-item {
-  height: 48px;
-  padding-left: 12px;
-  transition: all 0.2s ease;
+.nav-item {
+  display: flex;
+  align-items: center;
+  height: 3em;
+  margin: 0 2%;
+  padding: 0 1.2em;
+  border-radius: 0 2em 2em 0;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
-/* Icon style */
-mat-icon[matListIcon] {
-  font-size: 24px;
-  margin-right: 16px;
+.nav-item mat-icon {
+  font-size: 1.6em;
   color: #5f6368;
-  transition: margin 0.2s ease;
+  margin-right: 1.5em;
+  flex-shrink: 0;
 }
 
-/* Label text */
-span[matLine] {
-  font-size: 16px;
+.nav-item span {
+  font-size: 0.95rem;
+  font-weight: 500;
   color: #202124;
-  transition: opacity 0.2s ease;
+  white-space: nowrap;
 }
 
-/* Collapsed sidenav overrides */
-:host-context(.mat-drawer-collapsed) mat-list-item {
+.nav-item:hover {
+  background-color: rgba(95, 99, 104, 0.1);
+}
+
+.nav-item.selected {
+  background-color: #feefc3;
+}
+
+.nav-item.selected mat-icon {
+  color: black;
+}
+
+.nav-item.selected span {
+  font-weight: bold;
+}
+
+:host-context(.mat-drawer-collapsed) .nav-item {
   justify-content: center;
-  padding-left: 0;
+  padding: 0;
+  margin: 0.4em auto;
+  width: 3em;
+  height: 3em;
+  border-radius: 50%;
 }
 
-:host-context(.mat-drawer-collapsed) mat-icon[matListIcon] {
-  margin-right: 0;
+:host-context(.mat-drawer-collapsed) .nav-item mat-icon {
+  margin: 0;
 }
 
-:host-context(.mat-drawer-collapsed) span[matLine] {
-  opacity: 0;
-  width: 0;
-  overflow: hidden;
+:host-context(.mat-drawer-collapsed) .nav-item span {
+  display: none;
+}
+
+:host-context(.mat-drawer-collapsed) .nav-item.selected {
+  background-color: #feefc3;
 }

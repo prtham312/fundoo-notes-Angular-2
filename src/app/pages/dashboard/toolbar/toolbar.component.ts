@@ -11,21 +11,21 @@ import { MatToolbarModule} from '@angular/material/toolbar';
   styleUrls: ['./toolbar.component.css']
 })
 export class ToolbarComponent {
-isGrid = true;
+  isGrid = true;
 
-toggleView() {
-  this.isGrid = !this.isGrid;
-}
+  toggleView() {
+    this.isGrid = !this.isGrid;
+  }
 
-refreshPage() {
-  location.reload();
-}
+  refreshPage() {
+    location.reload();
+  }
 
-@Output() menuClicked = new EventEmitter<void>()
+  @Output() menuClicked = new EventEmitter<void>();
 
-toggleSidebar() {
-  this.menuClicked.emit();
-}
+  toggleSidebar() {
+    this.menuClicked.emit();
+  }
 
-mobileSearchOpen = false;
+  mobileSearchOpen = false;
 }

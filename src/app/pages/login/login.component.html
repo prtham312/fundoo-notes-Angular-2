@@ -11,7 +11,7 @@
     <br />
     <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Email or phone</mat-label>
+        <mat-label>Email</mat-label>
         <input matInput formControlName="email" />
 
         <mat-error
@@ -21,12 +21,12 @@
           "
         >
           <ng-container *ngIf="loginForm.get('email')?.hasError('required')">
-            Email or phone is required
+            Email required
           </ng-container>
           <ng-container
             *ngIf="loginForm.get('email')?.hasError('emailOrPhone')"
           >
-            Enter a valid email or 10-digit phone number
+            Enter a valid email
           </ng-container>
         </mat-error>
       </mat-form-field>
@@ -65,10 +65,13 @@
           mat-raised-button
           color="primary"
           type="submit"
-          [disabled]="loginForm.invalid"
+          [disabled]="loginForm.invalid || isLoading"
         >
           Login
         </button>
+      </div>
+      <div class="spinner-container" *ngIf="isLoading">
+        <mat-spinner diameter="40"></mat-spinner>
       </div>
     </form>
   </mat-card>

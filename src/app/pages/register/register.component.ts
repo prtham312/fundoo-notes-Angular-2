@@ -14,6 +14,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { UserService } from 'src/app/services/user_service/user.service';
 import { RouterModule } from '@angular/router';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 
 @Component({
   selector: 'app-register',
@@ -28,6 +31,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
     MatCheckboxModule,
     RouterModule,
     MatSnackBarModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
@@ -35,21 +39,31 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 export class RegisterComponent {
   registerForm: FormGroup;
   hidePassword = true;
+  isLoading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private user: UserService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private router: Router
   ) {
     this.registerForm = this.fb.group(
       {
-        firstName: ['', Validators.required],
-        lastName: ['', Validators.required],
+        firstName: [
+          '',
+          [Validators.required, Validators.pattern(/^[A-Za-z]+$/)],
+        ],
+        lastName: [
+          '',
+          [Validators.required, Validators.pattern(/^[A-Za-z]+$/)],
+        ],
         username: [
           '',
           [
             Validators.required,
-            Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/),
+            Validators.pattern(
+              /^(?=[^@]*[A-Za-z])[^@\s]+@[^\s@]+\.[^\s@]{2,}$/
+            ),
           ],
         ],
         password: [
@@ -84,25 +98,29 @@ export class RegisterComponent {
 
   onSubmit() {
     if (this.registerForm.valid) {
+      this.isLoading = true;
       const { firstName, lastName, username, password } =
         this.registerForm.value;
 
       const data = {
-        firstName: firstName,
-        lastName: lastName,
-        email: username, // need to confirm this
-        password: password,
+        firstName,
+        lastName,
+        email: username,
+        password,
         service: 'advance',
       };
 
       this.user.register(data).subscribe({
         next: (res: any) => {
+          this.isLoading = false;
           console.log('Registered successfully', res);
           this.snackBar.open('Signup successful!', 'Close', {
             duration: 3000,
           });
+          this.router.navigate(['/login']);
         },
         error: (err) => {
+          this.isLoading = false;
           console.error('Registration failed', err);
         },
       });

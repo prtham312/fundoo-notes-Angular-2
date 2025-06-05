@@ -33,7 +33,7 @@
   width: 120px;
   height: auto;
   display: block;
-  margin: 0 auto ;
+  margin: 0 auto;
 }
 
 .login-title {
@@ -51,7 +51,6 @@
   text-align: center;
 }
 
-
 .login-card p {
   margin-top: 4px;
   margin-bottom: 16px;
@@ -60,7 +59,7 @@
 }
 .login-card h3 {
   margin: 0;
-  font-size: 22px; 
+  font-size: 22px;
   font-weight: 500;
 }
 
@@ -77,4 +76,10 @@
 
 .forgot-password a:hover {
   text-decoration: underline;
+}
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }

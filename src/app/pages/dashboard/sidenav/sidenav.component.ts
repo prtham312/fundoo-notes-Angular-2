@@ -14,5 +14,9 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrls: ['./sidenav.component.css']
 })
 export class SidenavComponent {
+  selected = 'notes';
 
+  select(item: string) {
+    this.selected = item;
+  }
 }
