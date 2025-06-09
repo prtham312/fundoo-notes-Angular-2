@@ -1,0 +1,34 @@
+<!-- Collapsed view -->
+<div class="note-collapsed" *ngIf="!isExpanded" (click)="expand()">
+  <span class="placeholder-text">Take a note...</span>
+  <div class="icons">
+    <mat-icon fontSet="material-symbols-outlined" fontIcon="check_box">check_box</mat-icon>
+    <mat-icon fontSet="material-symbols-outlined" fontIcon="edit">edit</mat-icon>
+    <mat-icon fontSet="material-symbols-outlined" fontIcon="image">image</mat-icon>
+  </div>
+</div>
+
+<!-- Expanded view -->
+<div class="note-expanded" *ngIf="isExpanded">
+  <input
+    type="text"
+    [(ngModel)]="title"
+    placeholder="Title"
+    class="note-title"
+  />
+
+  <textarea
+    [(ngModel)]="description"
+    placeholder="Take a note..."
+    class="note-description"
+  ></textarea>
+
+  <div class="note-actions">
+    <mat-icon fontSet="material-symbols-outlined" fontIcon="palette">palette</mat-icon>
+    <mat-icon fontSet="material-symbols-outlined" fontIcon="notifications">notifications</mat-icon>
+    <mat-icon fontSet="material-symbols-outlined" fontIcon="person_add">person_add</mat-icon>
+    <mat-icon fontSet="material-symbols-outlined" fontIcon="image">image</mat-icon>
+    <mat-icon fontSet="material-symbols-outlined" fontIcon="archive">archive</mat-icon>
+    <span class="close-btn" (click)="collapse()">Close</span>
+  </div>
+</div>

@@ -1,0 +1,72 @@
+.note-collapsed,
+.note-expanded {
+  width: 100%;
+  max-width: 610px;
+  padding: 16px 24px;
+  margin: 16px auto;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+}
+
+
+
+.note-title,
+.note-description {
+  width: 100%;
+  font-size: 1rem;
+  border: none;
+  outline: none;
+  resize: none;
+  overflow: hidden;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  background: transparent;
+}
+
+
+.note-description {
+  min-height: 60px;   /* Slightly reduced height */
+}
+
+.note-collapsed {
+  width: 100%;
+  max-width: 610px;
+  padding: 16px 24px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.note-collapsed span {
+  color: #5f6368;
+  font-size: 1rem;
+}
+
+.icons {
+   display: flex;
+  gap: 12px;
+  margin-left: 16px;
+}
+.placeholder-text {
+  flex-grow: 1;
+  font-size: 1rem;
+  color: #5f6368;
+}
+
+
+.note-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-btn {
+  color: #1a73e8;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
