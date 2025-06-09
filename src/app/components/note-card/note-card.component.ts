@@ -11,4 +11,8 @@ import { CommonModule } from '@angular/common';
 export class NoteCardComponent {
   @Input() title: string = '';
   @Input() description: string = '';
+  @Input() color: string = '';
+@Input() isPinned: boolean = false;
+@Input() isArchived: boolean = false;
+@Input() isDeleted: boolean = false;
 }
