@@ -7,6 +7,8 @@ import { NoteCardComponent } from 'src/app/components/note-card/note-card.compon
 import { NoteInputComponent } from 'src/app/components/note-input/note-input.component';
 import { MatIconModule } from '@angular/material/icon';
 import { NotesService } from 'src/app/services/notes/notes.service';
+import { Router, NavigationEnd , RouterModule } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,6 +21,7 @@ import { NotesService } from 'src/app/services/notes/notes.service';
     NoteCardComponent,
     NoteInputComponent,
     MatIconModule,
+    RouterModule
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
@@ -32,11 +35,13 @@ export class DashboardComponent implements OnInit {
 
   notes: { title: string; description: string }[] = [];
 
-  constructor(private notesService: NotesService) {}
+  constructor(
+    private notesService: NotesService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.isMobile = window.innerWidth <= 768;
-
     const saved = localStorage.getItem('viewMode');
     this.viewMode = this.isMobile ? 'list' : (saved as 'grid' | 'list') || 'grid';
 
@@ -53,11 +58,17 @@ export class DashboardComponent implements OnInit {
     });
 
     this.fetchNotesFromAPI();
+
+    this.router.events.pipe(
+      filter((e) => e instanceof NavigationEnd)
+    ).subscribe((e: any) => {
+      const lastSegment = e.urlAfterRedirects.split('/').pop();
+      this.currentSection = lastSegment;
+    });
   }
 
   toggleViewMode() {
     if (this.isMobile) return;
-
     this.viewMode = this.viewMode === 'grid' ? 'list' : 'grid';
     localStorage.setItem('viewMode', this.viewMode);
   }
@@ -77,13 +88,8 @@ export class DashboardComponent implements OnInit {
   }
 
   onNoteCreated(note: any) {
-    console.log('Note received in dashboard:', note);
     this.notes.unshift(note);
     setTimeout(() => this.fetchNotesFromAPI(), 300);
-  }
-
-  setSection(section: string) {
-    this.currentSection = section;
   }
 
   get sidenavOpened(): boolean {

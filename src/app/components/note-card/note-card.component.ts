@@ -13,10 +13,14 @@ export class NoteCardComponent {
   hover = false;
   isSelected = false;
 
+
+
 toggleSelect(event: MouseEvent) {
   event.stopPropagation();
   this.isSelected = !this.isSelected;
 }
+
+@Input() noteId!: string;
 @Input() title: string = '';
 @Input() description: string = '';
 @Input() color: string = '';

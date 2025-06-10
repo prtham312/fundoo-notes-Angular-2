@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
+  background-color: #fff;
 }
 
 app-toolbar {
@@ -10,77 +11,65 @@ app-toolbar {
 
 .sidenav-container {
   width: 100%;
-  height: 100vh;
+  flex-grow: 1;
+  height: calc(100vh - 64px);
 }
 
-/* ✅ Keeps all content centered horizontally */
 mat-sidenav-content {
   width: 100%;
+  background-color: #fff;
+  overflow-x: hidden;
   display: flex;
-  justify-content: center;
+  justify-content: center; /* ✅ centers dashboard-content */
 }
 
-/* ✅ Layout wrapper */
+/* ✅ Dashboard layout container */
 .dashboard-content {
   width: 100%;
-  max-width: 1080px;
-  padding: 24px;
+  max-width: 1200px; /* ✅ keeps layout centered and bounded */
+  padding: 24px 16px 40px;
   box-sizing: border-box;
+  background-color: #fefefe;
 }
 
-/* ✅ Grid & List wrapper */
-.notes-container {
-  width: 100%;
-  padding-top: 24px;
-  box-sizing: border-box;
-}
-
+/* ✅ Grid View (centered, 4 per row) */
 .notes-container.grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
-  justify-content: flex-start;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 24px; /* spacing below input */
 }
 
 .notes-container.grid app-note-card {
- flex: 0 0 auto;
+  flex: 0 0 calc(25% - 12px);
+  max-width: 280px;
+  box-sizing: border-box;
 }
 
+/* ✅ List View (unchanged) */
 .notes-container.list {
   display: flex;
   flex-direction: column;
   gap: 12px;
   max-width: 610px;
-  margin: 0 auto;
+  margin: 24px auto 0;
 }
 
 .notes-container.list app-note-card {
   width: 100%;
 }
 
-/* ✅ Note Input should already be centered via its own CSS:
-   max-width: 610px; margin: auto; → do not touch note-input CSS */
-
-.custom-sidenav {
-  width: 240px;
-  transition: width 0.2s ease;
-  border-right: 1px solid #e0e0e0;
-  overflow: visible;
-  padding-top: 8px;
-}
-
-.mat-drawer-collapsed.custom-sidenav {
-  width: 72px;
-}
-
-:host-context(.mat-drawer-collapsed) .custom-sidenav {
-  width: 72px;
+/* ✅ Note Input centered */
+.note-input, app-note-input {
+  display: block;
+  margin: 0 auto;
 }
 
 /* ✅ Empty State */
 .empty-notes-placeholder {
   text-align: center;
-  padding: 190px 80px 20px 40px;
+  padding: 160px 80px 20px 40px;
   color: #5f5f5f;
 }
 
@@ -95,4 +84,22 @@ mat-sidenav-content {
 .empty-message {
   font-size: 1.1rem;
   margin: 0;
+}
+
+/* ✅ Sidenav */
+.custom-sidenav {
+  width: 240px;
+  transition: width 0.2s ease;
+  border-right: 1px solid #e0e0e0;
+  overflow: visible;
+  padding-top: 8px;
+  background-color: #fff;
+}
+
+.mat-drawer-collapsed.custom-sidenav {
+  width: 72px;
+}
+
+:host-context(.mat-drawer-collapsed) .custom-sidenav {
+  width: 72px;
 }

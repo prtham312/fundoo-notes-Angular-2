@@ -1,26 +1,34 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatSidenavModule} from '@angular/material/sidenav';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
-import { Output , EventEmitter } from '@angular/core';
-
-
+import { RouterModule, Router } from '@angular/router';
 
 @Component({
   selector: 'app-sidenav',
   standalone: true,
-  imports: [CommonModule , MatSidenavModule ,  MatListModule , MatIconModule],
+  imports: [
+    CommonModule,
+    MatSidenavModule,
+    MatListModule,
+    MatIconModule,
+    RouterModule,
+  ],
   templateUrl: './sidenav.component.html',
-  styleUrls: ['./sidenav.component.css']
+  styleUrls: ['./sidenav.component.css'],
 })
-export class SidenavComponent {
+export class SidenavComponent implements OnInit {
   selected = 'notes';
 
- @Output() sectionSelected = new EventEmitter<string>();
+  constructor(private router: Router) {}
+
+  ngOnInit(): void {
+    const currentPath = this.router.url.split('/').pop();
+    this.selected = currentPath || 'notes';
+  }
 
   select(item: string) {
     this.selected = item;
-    this.sectionSelected.emit(item); // ✅ emit to dashboard
   }
 }

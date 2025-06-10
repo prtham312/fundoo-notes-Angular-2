@@ -2,21 +2,20 @@
   <div
     class="nav-item"
     [ngClass]="{ selected: selected === 'notes' }"
+    routerLink="/dashboard/notes"
     (click)="select('notes')"
   >
     <mat-icon>lightbulb_outline</mat-icon>
-
     <span>Notes</span>
   </div>
 
   <div
     class="nav-item"
     [ngClass]="{ selected: selected === 'reminders' }"
+    routerLink="/dashboard/reminders"
     (click)="select('reminders')"
   >
-    <mat-icon fontSet="material-symbols-outlined" fontIcon="notifications"
-      >notifications</mat-icon
-    >
+    <mat-icon fontSet="material-symbols-outlined" fontIcon="notifications">notifications</mat-icon>
     <span>Reminders</span>
   </div>
 
@@ -25,31 +24,27 @@
     [ngClass]="{ selected: selected === 'labels' }"
     (click)="select('labels')"
   >
-    <mat-icon fontSet="material-symbols-outlined" fontIcon="edit"
-      >edit</mat-icon
-    >
+    <mat-icon fontSet="material-symbols-outlined" fontIcon="edit">edit</mat-icon>
     <span>Edit labels</span>
   </div>
 
   <div
     class="nav-item"
     [ngClass]="{ selected: selected === 'archive' }"
+    routerLink="/dashboard/archive"
     (click)="select('archive')"
   >
-    <mat-icon fontSet="material-symbols-outlined" fontIcon="archive"
-      >archive</mat-icon
-    >
+    <mat-icon fontSet="material-symbols-outlined" fontIcon="archive">archive</mat-icon>
     <span>Archive</span>
   </div>
 
   <div
     class="nav-item"
     [ngClass]="{ selected: selected === 'trash' }"
+    routerLink="/dashboard/trash"
     (click)="select('trash')"
   >
-    <mat-icon fontSet="material-symbols-outlined" fontIcon="delete"
-      >delete</mat-icon
-    >
+    <mat-icon fontSet="material-symbols-outlined" fontIcon="delete">delete</mat-icon>
     <span>Trash</span>
   </div>
 </mat-nav-list>
