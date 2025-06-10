@@ -1,37 +1,104 @@
-/* Default - no width */
 .note-collapsed {
+  position: relative;
   min-height: 100px;
   padding: 12px 16px;
   border-radius: 8px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
-  display: flex;
-  flex-direction: column;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  white-space: pre-wrap;
+  display: block;
   box-sizing: border-box;
+  background: white;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
 }
 
-/* Host-based style override */
+
+/* Elevate on hover */
+.note-collapsed:hover {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+/* Responsive width layout */
 :host(.grid) .note-collapsed {
   width: 280px;
 }
 
 :host(.list) .note-collapsed {
   width: 100%;
+  min-height: 140px;
+   display: flex;                    /* ✅ make it flex again */
+  flex-direction: column;          /* ✅ vertical flow */
+  /* justify-content: space-between; */
+}
+
+/* Top-left selectable tick icon */
+.select-icon {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  font-size: 20px;
+  z-index: 2;
+  color: black;
+  cursor: pointer;
+  background: transparent;  /* 🔥 remove white circle */
+  border-radius: 0;         /* 🔥 no rounding */
+  box-shadow: none;         /* 🔥 no shadow */
 }
 
 
 
-.note-collapsed span {
+
+/* Header container for title + pin */
+.note-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+/* Title that wraps nicely */
+.note-title-text {
+  font-weight: 500;
+  font-size: 1rem;
+  margin-bottom: 6px;
+  word-break: break-word;
+}
+
+
+/* Description content */
+.note-collapsed p {
+  font-size: 0.95rem;
+  margin: 0 0 12px 0;  /* ✅ extra bottom margin for visual space */
+  color: #3c4043;
+  word-break: break-word;
+}
+
+/* Pin icon floats top-right */
+.pin-icon {
+  font-size: 20px;
   color: #5f6368;
+  cursor: pointer;
+  flex-shrink: 0;
 }
 
-.note-collapsed .icons mat-icon {
-  margin-left: 8px;
+.note-footer {
+  display: flex;
+  justify-content: space-between;  /* ✅ spread from left to right */
+  align-items: center;
+ margin-top: auto; /* ✅ pushes it to bottom IF it's shown */
+  padding-top: 8px;
+  gap: 12px;
+}
+
+
+.note-footer mat-icon {
+  font-size: 20px;
+  cursor: pointer;
   color: #5f6368;
+  transition: color 0.2s ease;
 }
 
+
+/* Expanded mode styling */
 .note-expanded {
   display: flex;
   flex-direction: column;
