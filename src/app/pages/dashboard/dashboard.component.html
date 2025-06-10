@@ -1,4 +1,8 @@
-<app-toolbar (menuClicked)="isSidenavOpen = !isSidenavOpen"></app-toolbar>
+<app-toolbar
+  (menuClicked)="isSidenavOpen = !isSidenavOpen"
+  [viewMode]="viewMode"
+  (toggleView)="toggleViewMode()"
+></app-toolbar>
 
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav
@@ -11,29 +15,30 @@
   >
     <app-sidenav (sectionSelected)="setSection($event)"></app-sidenav>
   </mat-sidenav>
+
   <mat-sidenav-content>
     <div class="dashboard-content">
       <app-note-input
-       *ngIf="currentSection === 'notes'"
-      (noteCreated)="onNoteCreated($event)">
-      </app-note-input>
+        *ngIf="currentSection === 'notes'"
+        (noteCreated)="onNoteCreated($event)"
+      ></app-note-input>
+
       <div
-  *ngIf="currentSection === 'notes' && notes.length === 0"
-  class="empty-notes-placeholder"
->
+        *ngIf="currentSection === 'notes' && notes.length === 0"
+        class="empty-notes-placeholder"
+      >
+        <mat-icon class="empty-icon">lightbulb_outline</mat-icon>
+        <p class="empty-message">Notes you add appear here</p>
+      </div>
 
-      
-  <mat-icon class="empty-icon">lightbulb_outline</mat-icon>
-  <p class="empty-message">Notes you add appear here</p>
-</div>
-      <div class="notes-container">
+      <div class="notes-container" [ngClass]="viewMode">
         <app-note-card
-  *ngFor="let note of notes"
-  [title]="note.title"
-  [description]="note.description"
->
-</app-note-card>
-
+          *ngFor="let note of notes"
+          [title]="note.title"
+          [description]="note.description"
+          [class.grid]="viewMode === 'grid'"
+          [class.list]="viewMode === 'list'">
+        ></app-note-card>
       </div>
     </div>
   </mat-sidenav-content>

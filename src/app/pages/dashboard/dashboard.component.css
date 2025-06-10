@@ -13,7 +13,14 @@ app-toolbar {
   height: 100vh;
 }
 
+/* ✅ Keeps all content centered horizontally */
+mat-sidenav-content {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
 
+/* ✅ Layout wrapper */
 .dashboard-content {
   width: 100%;
   max-width: 1080px;
@@ -21,17 +28,38 @@ app-toolbar {
   box-sizing: border-box;
 }
 
+/* ✅ Grid & List wrapper */
 .notes-container {
+  width: 100%;
+  padding-top: 24px;
+  box-sizing: border-box;
+}
+
+.notes-container.grid {
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
   justify-content: flex-start;
-  width: 100%;
-  max-width: 1080px;
-  padding-top: 24px;
 }
 
+.notes-container.grid app-note-card {
+ flex: 0 0 auto;
+}
 
+.notes-container.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 610px;
+  margin: 0 auto;
+}
+
+.notes-container.list app-note-card {
+  width: 100%;
+}
+
+/* ✅ Note Input should already be centered via its own CSS:
+   max-width: 610px; margin: auto; → do not touch note-input CSS */
 
 .custom-sidenav {
   width: 240px;
@@ -48,16 +76,12 @@ app-toolbar {
 :host-context(.mat-drawer-collapsed) .custom-sidenav {
   width: 72px;
 }
-mat-sidenav-content {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
 
+/* ✅ Empty State */
 .empty-notes-placeholder {
- text-align: center;
- padding: 190px 80px 20px 40px;
- color: #5f5f5f;
+  text-align: center;
+  padding: 190px 80px 20px 40px;
+  color: #5f5f5f;
 }
 
 .empty-icon {
@@ -72,4 +96,3 @@ mat-sidenav-content {
   font-size: 1.1rem;
   margin: 0;
 }
-

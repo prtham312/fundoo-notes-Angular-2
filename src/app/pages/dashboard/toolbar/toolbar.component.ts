@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output , Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule} from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -11,10 +11,14 @@ import { MatToolbarModule} from '@angular/material/toolbar';
   styleUrls: ['./toolbar.component.css']
 })
 export class ToolbarComponent {
+@Input() viewMode!: 'grid' | 'list';
+@Output() toggleView = new EventEmitter<void>();
+
+
   isGrid = true;
 
-  toggleView() {
-    this.isGrid = !this.isGrid;
+  toggleViewMode() {
+    this.toggleView.emit();
   }
 
   refreshPage() {

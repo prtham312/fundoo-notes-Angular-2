@@ -1,5 +1,5 @@
+/* Default - no width */
 .note-collapsed {
-  width: 280px;
   min-height: 100px;
   padding: 12px 16px;
   border-radius: 8px;
@@ -9,7 +9,19 @@
   word-wrap: break-word;
   overflow-wrap: break-word;
   white-space: pre-wrap;
+  box-sizing: border-box;
 }
+
+/* Host-based style override */
+:host(.grid) .note-collapsed {
+  width: 280px;
+}
+
+:host(.list) .note-collapsed {
+  width: 100%;
+}
+
+
 
 .note-collapsed span {
   color: #5f6368;

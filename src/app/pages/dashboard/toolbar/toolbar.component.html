@@ -25,10 +25,8 @@
       <mat-icon>refresh</mat-icon>
     </button>
 
-    <button mat-icon-button (click)="toggleView()">
-      <mat-icon>{{
-        isGrid ? "view_stream_outline" : "grid_view"
-      }}</mat-icon>
+    <button mat-icon-button (click)="toggleViewMode()">
+      <mat-icon>{{ viewMode === 'grid' ? 'view_stream_outline' : 'grid_view' }}</mat-icon>
     </button>
 
     <button mat-icon-button>
