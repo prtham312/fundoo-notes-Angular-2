@@ -2,11 +2,13 @@ import { Component, Input, Output, EventEmitter, HostBinding } from '@angular/co
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { NotesService } from 'src/app/services/notes/notes.service';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-note-card',
   standalone: true,
-  imports: [CommonModule, MatIconModule],
+  imports: [CommonModule, MatIconModule , MatButtonModule  , MatMenuModule],
   templateUrl: './note-card.component.html',
   styleUrls: ['./note-card.component.css']
 })
@@ -43,7 +45,25 @@ export class NoteCardComponent {
     this.viewMode = value;
   }
 
-  
+  lightColors = ['#fff', '#f28b82', '#fbbc04', '#fff475', '#ccff90', '#a7ffeb', '#cbf0f8'];
+
+showColorPalette = false;
+toggleColorPalette() {
+  this.showColorPalette = !this.showColorPalette;
+}
+
+selectColor(color: string) {
+  this.color = color;
+  this.showColorPalette = false;
+}
+
+@Output() trash = new EventEmitter<void>();
+
+
+onTrash() {
+  this.trash.emit();
+}
+
 
   @HostBinding('class.grid')
   get isGrid() {

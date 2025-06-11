@@ -1,138 +1,45 @@
-/* 🔳 Common styles for both views */
 .note-collapsed {
   position: relative;
-  padding: 12px 16px;
-  border-radius: 8px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
-  background: white;
-  box-sizing: border-box;
-  transition: box-shadow 0.25s ease, transform 0.25s ease;
-}
-
-/* Hover elevation */
-.note-collapsed:hover {
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  transform: translateY(-1px);
-}
-
-/* 🔲 GRID MODE */
-:host(.grid) .note-collapsed {
-  width: 280px;
-  min-height: 140px;
-}
-
-/* 🧾 LIST MODE */
-:host(.list) .note-collapsed {
-  width: 100%;
-  min-height: 160px;
   display: flex;
   flex-direction: column;
-  margin-bottom: 12px;
+  min-height: 160px;
+  padding: 16px 16px 4px 16px;
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  transition: box-shadow 0.2s ease;
+  box-sizing: border-box;
 }
 
-/* ✅ Tick/select icon in top-left */
+/* Hover effect */
+.note-collapsed:hover {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Tick icon */
 .select-icon {
   position: absolute;
   top: -10px;
   left: -10px;
   font-size: 20px;
-  z-index: 2;
-  color: black;
   cursor: pointer;
-  background: transparent;
-  border-radius: 0;
-  box-shadow: none;
+  z-index: 2;
 }
 
-/* ✅ Title + Pin Row */
+/* Title and pin */
 .note-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  gap: 8px;
+  align-items: center;
 }
 
-/* ✅ Title Text */
 .note-title-text {
   font-weight: 500;
   font-size: 1rem;
-  margin-bottom: 6px;
   word-break: break-word;
 }
 
-/* ✅ Description Text */
-.note-collapsed p {
-  font-size: 0.95rem;
-  margin: 0 0 12px 0;
-  color: #3c4043;
-  word-break: break-word;
-}
-
-/* ✅ Footer icons row */
-.note-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: auto;
-  padding-top: 8px;
-  gap: 12px;
-}
-
-.note-footer mat-icon {
-  font-size: 20px;
-  cursor: pointer;
-  color: #5f6368;
-  transition: color 0.2s ease;
-}
-
-/* ✅ Expanded view styling */
-.note-expanded {
-  display: flex;
-  flex-direction: column;
-  padding: 12px 16px;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-  background: white;
-  max-width: 600px;
-  margin: auto;
-}
-
-.note-title {
-  font-size: 1rem;
-  font-weight: 500;
-  border: none;
-  outline: none;
-  margin-bottom: 8px;
-}
-
-.note-description {
-  resize: none;
-  border: none;
-  outline: none;
-  font-size: 0.95rem;
-  min-height: 60px;
-  margin-bottom: 8px;
-}
-
-.note-actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.note-actions mat-icon {
-  margin-right: 8px;
-  color: #5f6368;
-  cursor: pointer;
-}
-
-.close-btn {
-  color: #1a73e8;
-  cursor: pointer;
-  font-size: 0.9rem;
-}
-
-/* 📌 Pin icon style */
+/* Pin icon hidden by default */
 .pin-icon {
   font-size: 20px;
   color: #5f6368;
@@ -140,15 +47,97 @@
   border-radius: 50%;
   padding: 4px;
   cursor: pointer;
-  display: none;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
 }
 
-/* ✅ Show pin only on hover */
 .note-collapsed:hover .pin-icon {
-  display: block;
+  opacity: 1;
+  pointer-events: auto;
 }
 
-/* 📌 If pinned, color stays grey */
-.pin-icon.pinned {
+/* Body takes remaining space */
+.note-body {
+  flex-grow: 1;
+}
+
+.note-body p {
+  font-size: 0.95rem;
+  color: #3c4043;
+  margin: 6px 0 0;
+  word-break: break-word;
+}
+
+/* Footer pinned to bottom */
+.note-footer {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.note-collapsed:hover .note-footer {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.footer-icons {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-icons mat-icon,
+.footer-icons button mat-icon {
+  font-size: 18px;         /* 🔽 smaller size */
+  font-variation-settings: 'wght' 200;  /* 🔽 thinner stroke */
   color: #5f6368;
+  opacity: 0.75;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.footer-icons mat-icon:hover,
+.footer-icons button mat-icon:hover {
+  opacity: 1;
+}
+
+/* Color palette dropdown */
+.palette-container {
+  position: relative;
+}
+
+.color-palette {
+  display: flex;
+  position: absolute;
+  bottom: 30px;
+  left: 0;
+  background: white;
+  padding: 6px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+.color-circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin-right: 6px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+}
+
+/* Small dropdown */
+.small-menu .mat-menu-item {
+  font-size: 13px;
+  padding: 6px 12px;
+}
+
+.small-menu .mat-icon {
+  font-size: 18px;
 }

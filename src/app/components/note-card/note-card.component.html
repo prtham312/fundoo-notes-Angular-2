@@ -1,45 +1,71 @@
-<div class="note-collapsed" 
-     (mouseenter)="hover = true" 
+<div class="note-collapsed"
+     (mouseenter)="hover = true"
      (mouseleave)="hover = false"
-      [ngStyle]="{ 'background-color': color }"
-     >
+     [ngStyle]="{ 'background-color': color }">
 
-  <!-- Tick (select) icon -->
+  <!-- Select icon -->
   <mat-icon *ngIf="hover || isSelected"
             class="select-icon"
             (click)="toggleSelect($event)">
     {{ isSelected ? 'check_circle' : 'radio_button_unchecked' }}
   </mat-icon>
 
-  <!-- Title + Pin -->
+  <!-- Title and Pin -->
   <div class="note-header">
     <strong class="note-title-text">{{ title }}</strong>
-<mat-icon
-  fontSet="material-symbols-outlined"
-  class="pin-icon"
-  *ngIf="hover"
-  (click)="togglePin($event)"
-  [class.pinned]="isPined"
->
-  push_pin
-</mat-icon>
- </div>
+    <mat-icon
+      fontSet="material-symbols-outlined"
+      class="pin-icon"
+      (click)="togglePin($event)"
+      [class.pinned]="isPined"
+    >push_pin</mat-icon>
+  </div>
 
   <!-- Description -->
-  <p>{{ description }}</p>
+  <div class="note-body">
+    <p>{{ description }}</p>
+  </div>
 
-  <!-- Footer icons -->
-  <div class="note-footer" *ngIf="hover">
-    <mat-icon fontSet="material-symbols-outlined">palette</mat-icon>
-    <mat-icon fontSet="material-symbols-outlined">notifications</mat-icon>
-    <mat-icon fontSet="material-symbols-outlined">person_add</mat-icon>
-    <mat-icon fontSet="material-symbols-outlined">image</mat-icon>
-    <mat-icon
-  fontSet="material-symbols-outlined"
-  (click)="onArchive()"
-  matTooltip="Archive"
->archive</mat-icon>
+  <!-- Footer icons pinned to bottom -->
+  <div class="note-footer">
+    <div class="footer-icons">
+      <!-- Color Palette -->
+      <div class="palette-container">
+        <mat-icon fontSet="material-symbols-outlined" (click)="toggleColorPalette()">palette</mat-icon>
+        <div class="color-palette" *ngIf="showColorPalette">
+          <div
+            class="color-circle"
+            *ngFor="let c of lightColors"
+            [ngStyle]="{ 'background-color': c }"
+            (click)="selectColor(c)">
+          </div>
+        </div>
+      </div>
 
-    <mat-icon fontSet="material-symbols-outlined">more_vert</mat-icon>
+      <mat-icon fontSet="material-symbols-outlined">add_alert</mat-icon>
+      <mat-icon fontSet="material-symbols-outlined">person_add</mat-icon>
+      <mat-icon fontSet="material-symbols-outlined">image</mat-icon>
+      <mat-icon fontSet="material-symbols-outlined" (click)="onArchive()">archive</mat-icon>
+
+      <button
+        mat-icon-button
+        [matMenuTriggerFor]="moreMenu"
+        [matMenuTriggerRestoreFocus]="false"
+        (click)="$event.stopPropagation()"
+      >
+        <mat-icon fontSet="material-symbols-outlined">more_vert</mat-icon>
+      </button>
+    </div>
   </div>
 </div>
+
+<!-- Dropdown menu -->
+<mat-menu #moreMenu="matMenu" class="small-menu">
+  <button mat-menu-item (click)="onTrash()">Delete note</button>
+  <button mat-menu-item>Add label</button>
+  <button mat-menu-item>Add drawing</button>
+  <button mat-menu-item>Make a copy</button>
+  <button mat-menu-item>Show checkboxes</button>
+  <button mat-menu-item>Copy to Google Docs</button>
+  <button mat-menu-item>Version history</button>
+</mat-menu>
