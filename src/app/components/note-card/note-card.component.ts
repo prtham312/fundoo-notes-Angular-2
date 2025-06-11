@@ -43,6 +43,8 @@ export class NoteCardComponent {
     this.viewMode = value;
   }
 
+  
+
   @HostBinding('class.grid')
   get isGrid() {
     return this.viewMode === 'grid';

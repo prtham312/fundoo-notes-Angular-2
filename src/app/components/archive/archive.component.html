@@ -4,19 +4,39 @@
     <mat-icon
       class="archive-icon"
       fontSet="material-symbols-outlined"
-      fontIcon="archive">archive</mat-icon>
+      fontIcon="archive"
+    >archive</mat-icon>
     <p class="archive-text">Your archived notes appear here</p>
   </div>
 </div>
 
-<!-- Archive Notes (responsive layout) -->
-<div class="notes-container" [ngClass]="viewMode" *ngIf="archivedNotes.length > 0">
+<!-- Archive Notes: GRID VIEW -->
+<div
+  class="archive-notes-container archive-grid"
+  *ngIf="archivedNotes.length > 0 && viewMode === 'grid'"
+>
   <app-note-card
     *ngFor="let note of archivedNotes"
     [title]="note.title"
     [description]="note.description"
     [noteId]="note.id"
-    [color]="note.color">
+    [color]="note.color"
     (archived)="loadArchivedNotes()"
-  </app-note-card>
+  ></app-note-card>
+</div>
+
+<!-- Archive Notes: LIST VIEW -->
+<div
+  class="archive-notes-container archive-list"
+  *ngIf="archivedNotes.length > 0 && viewMode === 'list'"
+>
+  <app-note-card
+    *ngFor="let note of archivedNotes"
+    [title]="note.title"
+    [description]="note.description"
+    [noteId]="note.id"
+    [color]="note.color"
+    (archived)="loadArchivedNotes()"
+    [ngClass]="viewMode"
+  ></app-note-card>
 </div>
