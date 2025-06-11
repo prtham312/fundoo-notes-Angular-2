@@ -10,6 +10,7 @@ import { NotesService } from 'src/app/services/notes/notes.service';
 import { Router, NavigationEnd, RouterModule } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { ArchiveComponent } from 'src/app/components/archive/archive.component';
+import { TrashComponent } from 'src/app/components/trash/trash.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -23,7 +24,8 @@ import { ArchiveComponent } from 'src/app/components/archive/archive.component';
     NoteInputComponent,
     MatIconModule,
     RouterModule,
-    ArchiveComponent
+    ArchiveComponent,
+    TrashComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
@@ -88,6 +90,8 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+
+
   onNoteCreated(note: any) {
     console.log('Note created event received:', note);
     this.fetchNotesFromAPI();
@@ -108,4 +112,5 @@ export class DashboardComponent implements OnInit {
   onNoteArchived() {
     this.fetchNotesFromAPI(); // refresh to remove from list
   }
+
 }

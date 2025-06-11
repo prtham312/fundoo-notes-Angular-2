@@ -11,12 +11,11 @@
   box-sizing: border-box;
 }
 
-/* Hover effect */
 .note-collapsed:hover {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
-/* Tick icon */
+
 .select-icon {
   position: absolute;
   top: -10px;
@@ -26,7 +25,7 @@
   z-index: 2;
 }
 
-/* Title and pin */
+
 .note-header {
   display: flex;
   justify-content: space-between;
@@ -39,7 +38,7 @@
   word-break: break-word;
 }
 
-/* Pin icon hidden by default */
+
 .pin-icon {
   font-size: 20px;
   color: #5f6368;
@@ -57,7 +56,7 @@
   pointer-events: auto;
 }
 
-/* Body takes remaining space */
+
 .note-body {
   flex-grow: 1;
 }
@@ -69,7 +68,7 @@
   word-break: break-word;
 }
 
-/* Footer pinned to bottom */
+
 .note-footer {
   margin-top: auto;
   display: flex;
@@ -93,8 +92,8 @@
 
 .footer-icons mat-icon,
 .footer-icons button mat-icon {
-  font-size: 18px;         /* 🔽 smaller size */
-  font-variation-settings: 'wght' 200;  /* 🔽 thinner stroke */
+  font-size: 18px;  
+  font-variation-settings: 'wght' 200; 
   color: #5f6368;
   opacity: 0.75;
   cursor: pointer;
@@ -106,7 +105,7 @@
   opacity: 1;
 }
 
-/* Color palette dropdown */
+
 .palette-container {
   position: relative;
 }
@@ -132,7 +131,7 @@
   border: 1px solid #ccc;
 }
 
-/* Small dropdown */
+
 .small-menu .mat-menu-item {
   font-size: 13px;
   padding: 6px 12px;

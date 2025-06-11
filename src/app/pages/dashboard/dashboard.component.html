@@ -70,6 +70,10 @@
         *ngIf="currentSection === 'archive'"
         [viewMode]="viewMode"
       ></app-archive>
+      <app-trash
+  *ngIf="currentSection === 'trash'"
+  [viewMode]="viewMode"
+></app-trash>
 
     </div>
   </mat-sidenav-content>

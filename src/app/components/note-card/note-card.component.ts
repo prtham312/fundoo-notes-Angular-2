@@ -32,11 +32,14 @@ export class NoteCardComponent {
   @Input() isPined: boolean = false;
   @Input() isArchived: boolean = false;
   @Input() isDeleted: boolean = false;
-  @Input() context: 'notes' | 'archive' = 'notes';
+  @Input() context: 'notes' | 'archive' | 'trash' = 'notes';
+  
 
   // ✅ Outputs
   @Output() archived = new EventEmitter<void>();
   @Output() pinToggled = new EventEmitter<void>();
+  @Output() restored = new EventEmitter<void>();
+  @Output() deletedForever = new EventEmitter<void>();
 
   // ✅ Handle viewMode binding from dashboard
   private viewMode: string = 'grid';
@@ -61,8 +64,57 @@ selectColor(color: string) {
 
 
 onTrash() {
-  this.trash.emit();
+  const noteIdList = [this.id || this.noteId];
+
+  // First unarchive the note
+  this.notesService.archiveNote({ noteIdList, isArchived: false }).subscribe({
+    next: () => {
+      console.log('Unarchived before deleting');
+
+      // Now trash it
+      this.notesService.trashNote({ noteIdList, isDeleted: true }).subscribe({
+        next: () => {
+          console.log('Moved to trash after unarchive');
+          this.trash.emit();
+        },
+        error: (err) => console.error('Trash API error', err)
+      });
+
+    },
+    error: (err) => console.error('Unarchive API error', err)
+  });
 }
+
+onRestore() {
+  const payload = {
+    noteIdList: [this.id || this.noteId],
+    isDeleted: false
+  };
+
+  this.notesService.trashNote(payload).subscribe({
+    next: () => {
+      console.log('Note restored');
+      this.restored.emit();
+    },
+    error: (err) => console.error('Restore error', err)
+  });
+}
+
+onDeleteForever() {
+  const payload = {
+    noteIdList: [this.id || this.noteId]
+  };
+
+  this.notesService.deleteForever(payload).subscribe({
+    next: () => {
+      console.log('Note permanently deleted');
+      this.deletedForever.emit();
+    },
+    error: (err) => console.error('Delete forever error', err)
+  });
+}
+
+
 
 
   @HostBinding('class.grid')
