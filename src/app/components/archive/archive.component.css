@@ -29,3 +29,28 @@
   font-weight: 400;
   color: #5f6368;
 }
+.notes-container.grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.notes-container.grid app-note-card {
+  flex: 0 0 calc(25% - 12px);
+  max-width: 280px;
+  box-sizing: border-box;
+}
+
+.notes-container.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 610px;
+  margin: 24px auto 0;
+}
+
+.notes-container.list app-note-card {
+  width: 100%;
+}

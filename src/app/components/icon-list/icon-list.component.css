@@ -1,0 +1,43 @@
+.icon-list {
+  display: flex;
+  flex-wrap: wrap;                  /* ✅ responsive */
+  justify-content: space-between;  /* ✅ evenly spaced */
+  align-items: center;
+  width: 100%;
+  padding: 0 8px;
+  box-sizing: border-box;
+  gap: 12px;                        /* ✅ space between icons when wrapping */
+}
+
+mat-icon {
+  font-family: 'Material Symbols Outlined';
+  font-size: 20px;
+  color: #5f6368;                   /* ✅ Keep-style grey */
+  cursor: pointer;
+}
+
+/* Color palette toggle */
+.color-wrapper {
+  position: relative;
+}
+
+.color-palette {
+  position: absolute;
+  display: flex;
+  gap: 8px;
+  background: #fff;
+  padding: 8px;
+  border-radius: 8px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+  top: 32px;
+  left: 0;
+  z-index: 10;
+}
+
+.color-circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}

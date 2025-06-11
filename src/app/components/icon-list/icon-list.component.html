@@ -1,1 +1,22 @@
-<p>icon-list works!</p>
+<div class="icon-list">
+  <mat-icon fontSet="material-symbols-outlined" matTooltip="Remind me">notifications</mat-icon>
+  <mat-icon fontSet="material-symbols-outlined" matTooltip="Collaborator">person_add</mat-icon>
+
+  <div class="color-wrapper">
+    <mat-icon fontSet="material-symbols-outlined" (click)="togglePalette()" matTooltip="Background options">palette</mat-icon>
+    <div class="color-palette" *ngIf="showColorPalette">
+      <div
+        *ngFor="let color of colors"
+        [style.background]="color"
+        class="color-circle"
+        (click)="pickColor(color)"
+      ></div>
+    </div>
+  </div>
+
+  <mat-icon fontSet="material-symbols-outlined" matTooltip="Add image">image</mat-icon>
+  <mat-icon fontSet="material-symbols-outlined" matTooltip="Archive" (click)="onArchive()">archive</mat-icon>
+
+  <!-- Optional delete icon in view mode -->
+  <mat-icon *ngIf="context === 'view'" fontSet="material-symbols-outlined" (click)="onDelete()" matTooltip="Delete">delete</mat-icon>
+</div>

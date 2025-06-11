@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { NotesService } from 'src/app/services/notes/notes.service';
 import { Router, NavigationEnd , RouterModule } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { ArchiveComponent } from 'src/app/components/archive/archive.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,7 +22,8 @@ import { filter } from 'rxjs/operators';
     NoteCardComponent,
     NoteInputComponent,
     MatIconModule,
-    RouterModule
+    RouterModule,
+    ArchiveComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
@@ -33,7 +35,7 @@ export class DashboardComponent implements OnInit {
   viewMode: 'grid' | 'list' = 'grid';
   isMobile = false;
 
-  notes: { title: string; description: string }[] = [];
+  notes: {id: string ; title: string; description: string; color?: string }[] = [];
 
   constructor(
     private notesService: NotesService,
@@ -103,4 +105,8 @@ export class DashboardComponent implements OnInit {
   onMouseLeaveSidenav() {
     this.isHovered = false;
   }
+
+  onNoteArchived() {
+  this.fetchNotesFromAPI(); // refresh to remove from list
+}
 }

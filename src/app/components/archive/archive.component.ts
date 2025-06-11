@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit  } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { NoteCardComponent } from '../note-card/note-card.component';
 import { NotesService } from 'src/app/services/notes/notes.service';
+import { Input } from '@angular/core';
 
 @Component({
   selector: 'app-archive',
@@ -12,6 +13,8 @@ import { NotesService } from 'src/app/services/notes/notes.service';
   styleUrls: ['./archive.component.css'],
 })
 export class ArchiveComponent implements OnInit {
+  @Input() viewMode: 'grid' | 'list' = 'grid';
+
   archivedNotes: any[] = [];
 
   constructor(private notesService: NotesService) {}

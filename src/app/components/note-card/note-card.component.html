@@ -1,6 +1,8 @@
 <div class="note-collapsed" 
      (mouseenter)="hover = true" 
-     (mouseleave)="hover = false">
+     (mouseleave)="hover = false"
+      [ngStyle]="{ 'background-color': color }"
+     >
 
   <!-- Tick (select) icon -->
   <mat-icon *ngIf="hover || isSelected"
@@ -24,7 +26,12 @@
     <mat-icon fontSet="material-symbols-outlined">notifications</mat-icon>
     <mat-icon fontSet="material-symbols-outlined">person_add</mat-icon>
     <mat-icon fontSet="material-symbols-outlined">image</mat-icon>
-    <mat-icon fontSet="material-symbols-outlined">archive</mat-icon>
+    <mat-icon
+  fontSet="material-symbols-outlined"
+  (click)="onArchive()"
+  matTooltip="Archive"
+>archive</mat-icon>
+
     <mat-icon fontSet="material-symbols-outlined">more_vert</mat-icon>
   </div>
 </div>

@@ -9,7 +9,7 @@
 </div>
 
 <!-- Expanded view -->
-<div class="note-expanded" *ngIf="isExpanded">
+<div class="note-expanded" *ngIf="isExpanded" [ngStyle]="{ 'background-color': backgroundColor }">
   <input
     type="text"
     [(ngModel)]="title"
@@ -24,11 +24,12 @@
   ></textarea>
 
   <div class="note-actions">
-    <mat-icon fontSet="material-symbols-outlined" fontIcon="palette">palette</mat-icon>
-    <mat-icon fontSet="material-symbols-outlined" fontIcon="notifications">notifications</mat-icon>
-    <mat-icon fontSet="material-symbols-outlined" fontIcon="person_add">person_add</mat-icon>
-    <mat-icon fontSet="material-symbols-outlined" fontIcon="image">image</mat-icon>
-    <mat-icon fontSet="material-symbols-outlined" fontIcon="archive">archive</mat-icon>
-    <span class="close-btn" (click)="collapse()">Close</span>
-  </div>
+  <app-icon-list
+    context="create"
+    (archiveClicked)="onArchiveClick()"
+    (colorSelected)="setNoteColor($event)">
+  </app-icon-list>
+  <span class="close-btn" (click)="collapse()">Close</span>
+</div>
+
 </div>
