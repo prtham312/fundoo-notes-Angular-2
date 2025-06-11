@@ -1,36 +1,36 @@
+/* 🔳 Common styles for both views */
 .note-collapsed {
   position: relative;
-  min-height: 100px;
   padding: 12px 16px;
   border-radius: 8px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
-  display: block;
-  box-sizing: border-box;
   background: white;
+  box-sizing: border-box;
   transition: box-shadow 0.25s ease, transform 0.25s ease;
 }
 
-
-/* Elevate on hover */
+/* Hover elevation */
 .note-collapsed:hover {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   transform: translateY(-1px);
 }
 
-/* Responsive width layout */
+/* 🔲 GRID MODE */
 :host(.grid) .note-collapsed {
   width: 280px;
+  min-height: 140px;
 }
 
+/* 🧾 LIST MODE */
 :host(.list) .note-collapsed {
   width: 100%;
-  min-height: 140px;
-   display: flex;                    /* ✅ make it flex again */
-  flex-direction: column;          /* ✅ vertical flow */
-  /* justify-content: space-between; */
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
 }
 
-/* Top-left selectable tick icon */
+/* ✅ Tick/select icon in top-left */
 .select-icon {
   position: absolute;
   top: -10px;
@@ -39,15 +39,12 @@
   z-index: 2;
   color: black;
   cursor: pointer;
-  background: transparent;  /* 🔥 remove white circle */
-  border-radius: 0;         /* 🔥 no rounding */
-  box-shadow: none;         /* 🔥 no shadow */
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
 }
 
-
-
-
-/* Header container for title + pin */
+/* ✅ Title + Pin Row */
 .note-header {
   display: flex;
   justify-content: space-between;
@@ -55,7 +52,7 @@
   gap: 8px;
 }
 
-/* Title that wraps nicely */
+/* ✅ Title Text */
 .note-title-text {
   font-weight: 500;
   font-size: 1rem;
@@ -63,32 +60,23 @@
   word-break: break-word;
 }
 
-
-/* Description content */
+/* ✅ Description Text */
 .note-collapsed p {
   font-size: 0.95rem;
-  margin: 0 0 12px 0;  /* ✅ extra bottom margin for visual space */
+  margin: 0 0 12px 0;
   color: #3c4043;
   word-break: break-word;
 }
 
-/* Pin icon floats top-right */
-.pin-icon {
-  font-size: 20px;
-  color: #5f6368;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-
+/* ✅ Footer icons row */
 .note-footer {
   display: flex;
-  justify-content: space-between;  /* ✅ spread from left to right */
+  justify-content: space-between;
   align-items: center;
- margin-top: auto; /* ✅ pushes it to bottom IF it's shown */
+  margin-top: auto;
   padding-top: 8px;
   gap: 12px;
 }
-
 
 .note-footer mat-icon {
   font-size: 20px;
@@ -97,8 +85,7 @@
   transition: color 0.2s ease;
 }
 
-
-/* Expanded mode styling */
+/* ✅ Expanded view styling */
 .note-expanded {
   display: flex;
   flex-direction: column;
@@ -143,4 +130,25 @@
   color: #1a73e8;
   cursor: pointer;
   font-size: 0.9rem;
+}
+
+/* 📌 Pin icon style */
+.pin-icon {
+  font-size: 20px;
+  color: #5f6368;
+  background-color: #f1f3f4;
+  border-radius: 50%;
+  padding: 4px;
+  cursor: pointer;
+  display: none;
+}
+
+/* ✅ Show pin only on hover */
+.note-collapsed:hover .pin-icon {
+  display: block;
+}
+
+/* 📌 If pinned, color stays grey */
+.pin-icon.pinned {
+  color: #5f6368;
 }

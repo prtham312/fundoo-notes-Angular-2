@@ -22,5 +22,12 @@ archiveNote(payload: any) {
     return this.http.postApi('notes/archiveNotes', payload, headers);
   }
 
+pinNote(payload: any) {
+  const headers = this.http.getHeader();
+  return this.http.postApi('notes/pinUnpinNotes', payload, headers);
+}
+
+
+  
 
 }

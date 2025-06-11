@@ -7,7 +7,7 @@ import { NoteCardComponent } from 'src/app/components/note-card/note-card.compon
 import { NoteInputComponent } from 'src/app/components/note-input/note-input.component';
 import { MatIconModule } from '@angular/material/icon';
 import { NotesService } from 'src/app/services/notes/notes.service';
-import { Router, NavigationEnd , RouterModule } from '@angular/router';
+import { Router, NavigationEnd, RouterModule } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { ArchiveComponent } from 'src/app/components/archive/archive.component';
 
@@ -29,13 +29,14 @@ import { ArchiveComponent } from 'src/app/components/archive/archive.component';
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
+  pinnedNotes: any[] = [];
+  otherNotes: any[] = [];
+
   isSidenavOpen = false;
   isHovered = false;
   currentSection = 'notes';
   viewMode: 'grid' | 'list' = 'grid';
   isMobile = false;
-
-  notes: {id: string ; title: string; description: string; color?: string }[] = [];
 
   constructor(
     private notesService: NotesService,
@@ -78,20 +79,18 @@ export class DashboardComponent implements OnInit {
   fetchNotesFromAPI() {
     this.notesService.getAllNotes().subscribe({
       next: (res: any) => {
-        const apiNotes = res.data?.data;
-        this.notes = apiNotes
-          .filter((n: any) => !n.isArchived && !n.isDeleted)
-          .reverse();
+        const all = res.data?.data || [];
+        const visible = all.filter((n : any) => !n.isArchived && !n.isDeleted);
+        this.pinnedNotes = visible.filter((n:any) => n.isPined);
+        this.otherNotes = visible.filter((n:any) => !n.isPined);
       },
-      error: (err) => {
-        console.error('Error fetching notes:', err);
-      },
+      error: (err) => console.error('Error fetching notes:', err)
     });
   }
 
   onNoteCreated(note: any) {
-    this.notes.unshift(note);
-    setTimeout(() => this.fetchNotesFromAPI(), 300);
+    console.log('Note created event received:', note);
+    this.fetchNotesFromAPI();
   }
 
   get sidenavOpened(): boolean {
@@ -107,6 +106,6 @@ export class DashboardComponent implements OnInit {
   }
 
   onNoteArchived() {
-  this.fetchNotesFromAPI(); // refresh to remove from list
-}
+    this.fetchNotesFromAPI(); // refresh to remove from list
+  }
 }

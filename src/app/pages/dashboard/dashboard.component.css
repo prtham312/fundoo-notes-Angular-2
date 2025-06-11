@@ -36,9 +36,9 @@ mat-sidenav-content {
 .notes-container.grid {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start; /* ✅ aligns cards to the left */
   gap: 12px;
-  margin-top: 24px; /* spacing below input */
+  margin-top: 24px;
 }
 
 .notes-container.grid app-note-card {
@@ -102,4 +102,31 @@ mat-sidenav-content {
 
 :host-context(.mat-drawer-collapsed) .custom-sidenav {
   width: 72px;
+}
+
+.note-section {
+  margin-bottom: 32px;
+  width: 100%;
+}
+
+.note-section-heading {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #5f6368;
+  padding: 8px 0 4px 12px;
+}
+
+.notes-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 0 12px;
+}
+
+.note-wrapper {
+  width: 100%;
+  max-width: 1080px;
+  padding: 16px 12px 0;
+  box-sizing: border-box;
+  margin-top: 24px; /* ✅ prevents collision with note input */
 }

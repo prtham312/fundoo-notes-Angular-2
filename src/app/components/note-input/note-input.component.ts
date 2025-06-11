@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { NotesService } from 'src/app/services/notes/notes.service';
 import { IconListComponent } from '../icon-list/icon-list.component';
 
+
 @Component({
   selector: 'app-note-input',
   standalone: true,
@@ -18,56 +19,68 @@ export class NoteInputComponent {
   isExpanded = false;
   title = '';
   description = '';
-  backgroundColor: string = '#fff'; // ✅ added for background control
-
-  @Output() noteCreated = new EventEmitter<{ title: string; description: string }>();
+  backgroundColor: string = '#fff'; // ✅ for note background color
 
   expand() {
     this.isExpanded = true;
   }
 
-  collapse() {
-    if (this.title.trim() || this.description.trim()) {
-      const newNote = {
-        title: this.title.trim(),
-        description: this.description.trim(),
-        isPinned: false,
-        isArchived: false,
-        isDeleted: false,
-        color: this.backgroundColor
-      };
+  @Output() noteAdded = new EventEmitter<{
+  id: string;
+  title: string;
+  description: string;
+  color?: string;
+}>();
 
-      this.notesService.addNote(newNote).subscribe({
-        next: (res: any) => {
-          const createdNote = res.data?.details;
-          if (createdNote) {
-            this.noteCreated.emit(createdNote); // ✅ emit real backend-created note
-          }
-          this.resetFields();
-        },
-        error: (err) => {
-          console.error('API failed to add note:', err);
-          this.resetFields();
+collapse() {
+  if (this.title.trim() || this.description.trim()) {
+    const newNote = {
+      title: this.title.trim(),
+      description: this.description.trim(),
+      isPinned: false,
+      isArchived: false,
+      isDeleted: false,
+      color: this.backgroundColor,
+    };
+
+    this.notesService.addNote(newNote).subscribe({
+      next: (res: any) => {
+        const apiNote = res.data?.details;
+        if (apiNote) {
+          const createdNote = {
+            id: apiNote.id,
+            title: this.title.trim(),
+            description: this.description.trim(),
+            color: this.backgroundColor,
+          };
+          console.log('✅ Emitting:', createdNote);
+          this.noteAdded.emit(createdNote);
         }
-      });
-    } else {
-      this.resetFields();
-    }
+        this.resetFields();
+      },
+      error: (err) => {
+        console.error('API failed:', err);
+        this.resetFields();
+      },
+    });
+  } else {
+    this.resetFields();
   }
+}
+
 
   resetFields() {
     this.title = '';
     this.description = '';
-    this.backgroundColor = '#fff'; // ✅ reset color
+    this.backgroundColor = '#fff';
     this.isExpanded = false;
   }
 
   onArchiveClick() {
     console.log('Archive clicked from icon-list');
-    // Optionally: you could auto-archive and collapse here
   }
 
   setNoteColor(color: string) {
-    this.backgroundColor = color; // ✅ apply selected color
+    this.backgroundColor = color;
   }
 }

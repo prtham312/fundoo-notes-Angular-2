@@ -14,8 +14,16 @@
   <!-- Title + Pin -->
   <div class="note-header">
     <strong class="note-title-text">{{ title }}</strong>
-    <mat-icon fontSet="material-symbols-outlined" *ngIf="hover" class="pin-icon">push_pin</mat-icon>
-  </div>
+<mat-icon
+  fontSet="material-symbols-outlined"
+  class="pin-icon"
+  *ngIf="hover"
+  (click)="togglePin($event)"
+  [class.pinned]="isPined"
+>
+  push_pin
+</mat-icon>
+ </div>
 
   <!-- Description -->
   <p>{{ description }}</p>
