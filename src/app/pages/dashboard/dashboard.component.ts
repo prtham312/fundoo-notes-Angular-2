@@ -11,7 +11,8 @@ import { Router, NavigationEnd, RouterModule } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { ArchiveComponent } from 'src/app/components/archive/archive.component';
 import { TrashComponent } from 'src/app/components/trash/trash.component';
-
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { EditNoteDialogComponent } from 'src/app/components/edit-note/edit-note-dialog.component';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -26,6 +27,8 @@ import { TrashComponent } from 'src/app/components/trash/trash.component';
     RouterModule,
     ArchiveComponent,
     TrashComponent,
+    MatDialogModule,
+    EditNoteDialogComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
@@ -48,7 +51,8 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private notesService: NotesService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -183,4 +187,44 @@ export class DashboardComponent implements OnInit {
   onMouseLeaveSidenav() {
     this.isHovered = false;
   }
+
+  // ✅ OPEN EDIT DIALOG
+  openEditDialog(note: any) {
+    const dialogRef = this.dialog.open(EditNoteDialogComponent, {
+      data: {
+        id: note.id,
+        title: note.title,
+        description: note.description
+      },
+      panelClass: 'edit-note-dialog',
+      backdropClass: 'blurred-backdrop'
+    });
+
+    dialogRef.afterClosed().subscribe(updated => {
+      if (updated) {
+        // live update without refresh
+        const noteList = note.isPined ? this.pinnedNotes : this.otherNotes;
+        const index = noteList.findIndex(n => n.id === note.id);
+        if (index > -1) {
+          noteList[index].title = updated.title;
+          noteList[index].description = updated.description;
+        }
+      }
+    });
+  }
+
+  get sectionTitle(): string {
+  switch (this.currentSection) {
+    case 'archive':
+      return 'Archive';
+    case 'trash':
+      return 'Trash';
+    case 'reminders':
+      return 'Reminders';
+    case 'notes':
+    default:
+      return 'Keep';
+  }
+}
+
 }

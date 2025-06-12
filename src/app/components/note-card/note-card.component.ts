@@ -36,12 +36,14 @@ export class NoteCardComponent {
   @Input() context: 'notes' | 'archive' | 'trash' = 'notes';
   @Input() searchTerm: string = '';
 
+  // ✅ Outputs
   @Output() archived = new EventEmitter<void>();
   @Output() pinToggled = new EventEmitter<void>();
   @Output() restored = new EventEmitter<void>();
   @Output() deletedForever = new EventEmitter<void>();
   @Output() trash = new EventEmitter<void>();
   @Output() trashed = new EventEmitter<string>();
+  @Output() editNoteClicked = new EventEmitter<any>(); // 🆕 Emit note data when clicked
 
   private viewMode: string = 'grid';
   @Input() set ngClass(value: string) {
@@ -188,4 +190,22 @@ export class NoteCardComponent {
     const regex = new RegExp(`(${this.searchTerm})`, 'gi');
     return text.replace(regex, '<mark>$1</mark>');
   }
+
+ onCardClick(event: MouseEvent) {
+  // Prevent if the click is on a button or icon inside the card
+  const target = event.target as HTMLElement;
+  const blockedTags = ['MAT-ICON', 'BUTTON'];
+
+  if (blockedTags.includes(target.tagName)) return;
+
+  if (this.context !== 'trash') {
+    this.editNoteClicked.emit({
+      id: this.id,
+      title: this.title,
+      description: this.description,
+      color: this.color,
+      isPined: this.isPined
+    });
+  }
+}
 }

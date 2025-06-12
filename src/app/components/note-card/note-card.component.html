@@ -1,30 +1,31 @@
+<!-- Entire card is now clickable for edit (unless in trash) -->
 <div class="note-collapsed"
      (mouseenter)="hover = true"
      (mouseleave)="hover = false"
-     [ngStyle]="{ 'background-color': color }">
+     [ngStyle]="{ 'background-color': color }"
+     (click)="onCardClick($event)"
+     [class.card-clickable]="context !== 'trash'">
 
   <!-- Select icon -->
   <mat-icon *ngIf="hover || isSelected"
             class="select-icon"
-            (click)="toggleSelect($event)">
+            (click)="toggleSelect($event); $event.stopPropagation()">
     {{ isSelected ? 'check_circle' : 'radio_button_unchecked' }}
   </mat-icon>
 
   <!-- Title and Pin -->
   <div class="note-header">
-    <!-- 🔥 highlight applied here -->
     <strong class="note-title-text" [innerHTML]="highlight(title)"></strong>
     <mat-icon
       fontSet="material-symbols-outlined"
       class="pin-icon"
-      (click)="togglePin($event)"
+      (click)="togglePin($event); $event.stopPropagation()"
       [class.pinned]="isPined"
     >push_pin</mat-icon>
   </div>
 
   <!-- Description -->
   <div class="note-body">
-    <!-- 🔥 highlight applied here -->
     <p [innerHTML]="highlight(description)"></p>
   </div>
 
@@ -32,46 +33,48 @@
   <div class="note-footer">
     <div class="footer-icons">
 
-      <!-- 🗑 Trash Mode (Restore + Delete Forever only) -->
+      <!-- 🗑 Trash Mode -->
       <ng-container *ngIf="context === 'trash'; else normalIcons">
         <mat-icon
           fontSet="material-symbols-outlined"
-          (click)="onRestore()"
+          (click)="onRestore(); $event.stopPropagation()"
           matTooltip="Restore"
         >restore_from_trash</mat-icon>
 
         <mat-icon
           fontSet="material-symbols-outlined"
-          (click)="onDeleteForever()"
+          (click)="onDeleteForever(); $event.stopPropagation()"
           matTooltip="Delete forever"
         >delete_forever</mat-icon>
       </ng-container>
 
-      <!-- Color Palette -->
+      <!-- Non-trash icons -->
       <ng-template #normalIcons>
         <div class="palette-container">
-          <mat-icon fontSet="material-symbols-outlined" (click)="toggleColorPalette()">palette</mat-icon>
+          <mat-icon
+            fontSet="material-symbols-outlined"
+            (click)="toggleColorPalette(); $event.stopPropagation()"
+          >palette</mat-icon>
           <div class="color-palette" *ngIf="showColorPalette">
             <div
               class="color-circle"
               *ngFor="let c of lightColors"
               [ngStyle]="{ 'background-color': c }"
-              (click)="selectColor(c)">
+              (click)="selectColor(c); $event.stopPropagation()">
             </div>
           </div>
         </div>
 
-        <mat-icon fontSet="material-symbols-outlined">add_alert</mat-icon>
-        <mat-icon fontSet="material-symbols-outlined">person_add</mat-icon>
-        <mat-icon fontSet="material-symbols-outlined">image</mat-icon>
-        <mat-icon fontSet="material-symbols-outlined" (click)="onArchive()">archive</mat-icon>
+        <mat-icon fontSet="material-symbols-outlined" (click)="$event.stopPropagation()">add_alert</mat-icon>
+        <mat-icon fontSet="material-symbols-outlined" (click)="$event.stopPropagation()">person_add</mat-icon>
+        <mat-icon fontSet="material-symbols-outlined" (click)="$event.stopPropagation()">image</mat-icon>
+        <mat-icon fontSet="material-symbols-outlined" (click)="onArchive(); $event.stopPropagation()">archive</mat-icon>
 
         <button
           mat-icon-button
           [matMenuTriggerFor]="moreMenu"
           [matMenuTriggerRestoreFocus]="false"
-          (click)="$event.stopPropagation()"
-        >
+          (click)="$event.stopPropagation()">
           <mat-icon fontSet="material-symbols-outlined">more_vert</mat-icon>
         </button>
       </ng-template>
@@ -81,11 +84,11 @@
 
 <!-- Dropdown menu -->
 <mat-menu #moreMenu="matMenu" class="small-menu">
-  <button mat-menu-item (click)="onTrash()">Delete note</button>
-  <button mat-menu-item>Add label</button>
-  <button mat-menu-item>Add drawing</button>
-  <button mat-menu-item>Make a copy</button>
-  <button mat-menu-item>Show checkboxes</button>
-  <button mat-menu-item>Copy to Google Docs</button>
-  <button mat-menu-item>Version history</button>
+  <button mat-menu-item (click)="onTrash(); $event.stopPropagation()">Delete note</button>
+  <button mat-menu-item (click)="$event.stopPropagation()">Add label</button>
+  <button mat-menu-item (click)="$event.stopPropagation()">Add drawing</button>
+  <button mat-menu-item (click)="$event.stopPropagation()">Make a copy</button>
+  <button mat-menu-item (click)="$event.stopPropagation()">Show checkboxes</button>
+  <button mat-menu-item (click)="$event.stopPropagation()">Copy to Google Docs</button>
+  <button mat-menu-item (click)="$event.stopPropagation()">Version history</button>
 </mat-menu>

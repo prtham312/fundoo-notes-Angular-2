@@ -18,6 +18,8 @@ export class ToolbarComponent {
   @Output() toggleView = new EventEmitter<void>();
   @Output() menuClicked = new EventEmitter<void>();
   @Output() searchChanged = new EventEmitter<string>();
+  @Input() title: string = 'Keep';
+
 
   mobileSearchOpen = false;
   searchTerm: string = '';

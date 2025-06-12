@@ -47,9 +47,9 @@ pinNote(payload: any) {
     return this.http.postApi('notes/deleteForeverNotes', payload, headers);
   }
 
-  
-
-
-  
+  updateNote(payload: { noteId: string; title: string; description: string }) {
+  const headers = this.http.getHeader();
+  return this.http.postApi('notes/updateNotes', payload, headers);
+}
 
 }

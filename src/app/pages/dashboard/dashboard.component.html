@@ -1,8 +1,9 @@
 <app-toolbar
+  [title]="sectionTitle"
   (menuClicked)="isSidenavOpen = !isSidenavOpen"
   [viewMode]="viewMode"
   (toggleView)="toggleViewMode()"
-  (searchChanged)="onSearch($event)" 
+  (searchChanged)="onSearch($event)"
 ></app-toolbar>
 
 <mat-sidenav-container class="sidenav-container">
@@ -24,17 +25,14 @@
       <ng-container *ngIf="currentSection === 'notes'">
         <app-note-input (noteAdded)="onNoteCreated($event)"></app-note-input>
 
-        <div
-          *ngIf="pinnedNotes.length === 0 && otherNotes.length === 0"
-          class="empty-notes-placeholder"
-        >
+        <div *ngIf="pinnedNotes.length === 0 && otherNotes.length === 0" class="empty-notes-placeholder">
           <mat-icon class="empty-icon">lightbulb_outline</mat-icon>
           <p class="empty-message">Notes you add appear here</p>
         </div>
 
         <!-- ✅ PINNED -->
         <div *ngIf="(searching ? filteredPinned : pinnedNotes).length > 0" class="note-section">
-          <div class="note-section-heading">PINNED</div>
+          <div class="note-section-heading"></div>
           <div class="notes-container" [ngClass]="viewMode">
             <app-note-card
               *ngFor="let note of (searching ? filteredPinned : pinnedNotes)"
@@ -43,11 +41,12 @@
               [description]="note.description"
               [color]="note.color || '#fff'"
               [isPined]="note.isPined"
-              [searchTerm]="searchTerm" 
+              [searchTerm]="searchTerm"
+              [ngClass]="viewMode"
               (pinToggled)="fetchNotesFromAPI()"
               (archived)="onNoteArchived()"
               (trashed)="onNoteTrashed(note.id)"
-              [ngClass]="viewMode"
+              (editNoteClicked)="openEditDialog(note)"  
             ></app-note-card>
           </div>
         </div>
@@ -65,27 +64,23 @@
               [description]="note.description"
               [color]="note.color || '#fff'"
               [isPined]="note.isPined"
-              [searchTerm]="searchTerm" 
+              [searchTerm]="searchTerm"
+              [ngClass]="viewMode"
               (pinToggled)="fetchNotesFromAPI()"
               (archived)="onNoteArchived()"
               (trashed)="onNoteTrashed(note.id)"
-              [ngClass]="viewMode"
+              (editNoteClicked)="openEditDialog(note)"   
             ></app-note-card>
           </div>
         </div>
       </ng-container>
 
       <!-- ✅ Archive -->
-      <app-archive
-        *ngIf="currentSection === 'archive'"
-        [viewMode]="viewMode"
-      ></app-archive>
+      <app-archive *ngIf="currentSection === 'archive'" [viewMode]="viewMode"></app-archive>
 
       <!-- ✅ Trash -->
-      <app-trash
-        *ngIf="currentSection === 'trash'"
-        [viewMode]="viewMode"
-      ></app-trash>
+      <app-trash *ngIf="currentSection === 'trash'" [viewMode]="viewMode"></app-trash>
+
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

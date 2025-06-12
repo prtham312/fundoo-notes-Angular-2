@@ -1,0 +1,33 @@
+<div class="backdrop">
+  <div class="edit-dialog" [ngStyle]="{ 'background-color': color }">
+    <!-- Header -->
+    <div class="edit-header">
+      <input
+        [(ngModel)]="title"
+        placeholder="Title"
+        class="edit-title"
+        autocomplete="off"
+      />
+      <button mat-icon-button (click)="close()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <!-- Body -->
+    <textarea
+      [(ngModel)]="description"
+      class="edit-body"
+      placeholder="Take a note..."
+    ></textarea>
+
+    <!-- Footer -->
+    <div class="edit-footer">
+      <div class="edit-icons">
+        <mat-icon fontSet="material-symbols-outlined">palette</mat-icon>
+        <mat-icon fontSet="material-symbols-outlined">image</mat-icon>
+        <mat-icon fontSet="material-symbols-outlined">archive</mat-icon>
+      </div>
+      <button mat-button color="primary" (click)="updateNote()">Save</button>
+    </div>
+  </div>
+</div>
