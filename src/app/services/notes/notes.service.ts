@@ -47,6 +47,8 @@ pinNote(payload: any) {
     return this.http.postApi('notes/deleteForeverNotes', payload, headers);
   }
 
+  
+
 
   
 

@@ -73,9 +73,25 @@ export class NoteCardComponent {
   }
 
   selectColor(color: string) {
-    this.color = color;
-    this.showColorPalette = false;
-  }
+  const noteId = this.id || this.noteId;
+  const payload = {
+    noteIdList: [noteId],
+    color: color
+  };
+
+  this.notesService.changeNoteColor(payload).subscribe({
+    next: () => {
+      console.log('Color updated to:', color);
+      this.color = color; // update UI
+    },
+    error: (err : any) => {
+      console.error('Color change failed:', err);
+    }
+  });
+
+  this.showColorPalette = false;
+}
+
 
   // ✅ Archive logic
   onArchive() {
