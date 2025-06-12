@@ -98,7 +98,9 @@ export class DashboardComponent implements OnInit {
     this.notesService.getAllNotes().subscribe({
       next: (res: any) => {
         const all = res.data?.data || [];
-        const visible = all.filter((n: any) => !n.isArchived && !n.isDeleted);
+        const visible = all
+        .filter((n: any) => !n.isArchived && !n.isDeleted)
+        .reverse()
         this.pinnedNotes = visible.filter((n: any) => n.isPined);
         this.otherNotes = visible.filter((n: any) => !n.isPined);
       },
@@ -131,4 +133,10 @@ export class DashboardComponent implements OnInit {
   onMouseLeaveSidenav() {
     this.isHovered = false;
   }
+
+  onNoteTrashed(noteId: string) {
+  this.pinnedNotes = this.pinnedNotes.filter(note => note.id !== noteId);
+  this.otherNotes = this.otherNotes.filter(note => note.id !== noteId);
+}
+
 }

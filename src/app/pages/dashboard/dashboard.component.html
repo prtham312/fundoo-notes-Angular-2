@@ -21,9 +21,8 @@
 
       <!-- ✅ Notes Section -->
       <ng-container *ngIf="currentSection === 'notes'">
-
-        <!-- 🔥 FIXED: changed (noteCreated) → (noteAdded) -->
         <app-note-input (noteAdded)="onNoteCreated($event)"></app-note-input>
+
 
         <div *ngIf="pinnedNotes.length === 0 && otherNotes.length === 0" class="empty-notes-placeholder">
           <mat-icon class="empty-icon">lightbulb_outline</mat-icon>
@@ -48,7 +47,7 @@
           </div>
         </div>
 
-        <!-- ✅ OTHERS -->
+        <!-- ✅ OTHERS (your original notes list) -->
         <div *ngIf="otherNotes.length > 0" class="note-section">
           <div *ngIf="pinnedNotes.length > 0" class="note-section-heading">OTHERS</div>
           <div class="notes-container" [ngClass]="viewMode">
@@ -72,12 +71,10 @@
         *ngIf="currentSection === 'archive'"
         [viewMode]="viewMode"
       ></app-archive>
-
-      <!-- ✅ Trash -->
       <app-trash
-        *ngIf="currentSection === 'trash'"
-        [viewMode]="viewMode"
-      ></app-trash>
+  *ngIf="currentSection === 'trash'"
+  [viewMode]="viewMode"
+></app-trash>
 
     </div>
   </mat-sidenav-content>
