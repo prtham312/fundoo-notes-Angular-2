@@ -24,7 +24,6 @@ export class NoteCardComponent {
 
   constructor(private notesService: NotesService) {}
 
-  // ✅ Inputs
   @Input() noteId!: string;
   @Input() title: string = '';
   @Input() color: string = '#fff';
@@ -36,27 +35,25 @@ export class NoteCardComponent {
   @Input() context: 'notes' | 'archive' | 'trash' = 'notes';
   @Input() searchTerm: string = '';
 
-  // ✅ Outputs
   @Output() archived = new EventEmitter<void>();
+  @Output() unarchived = new EventEmitter<void>(); // ✅ new
   @Output() pinToggled = new EventEmitter<void>();
   @Output() restored = new EventEmitter<void>();
   @Output() deletedForever = new EventEmitter<void>();
   @Output() trash = new EventEmitter<void>();
   @Output() trashed = new EventEmitter<string>();
-  @Output() editNoteClicked = new EventEmitter<any>(); // 🆕 Emit note data when clicked
+  @Output() editNoteClicked = new EventEmitter<any>();
 
   private viewMode: string = 'grid';
   @Input() set ngClass(value: string) {
     this.viewMode = value;
   }
 
-  @HostBinding('class.grid')
-  get isGrid() {
+  @HostBinding('class.grid') get isGrid() {
     return this.viewMode === 'grid';
   }
 
-  @HostBinding('class.list')
-  get isList() {
+  @HostBinding('class.list') get isList() {
     return this.viewMode === 'list';
   }
 
@@ -74,29 +71,23 @@ export class NoteCardComponent {
 
   selectColor(color: string) {
     const noteId = this.id || this.noteId;
-    const payload = {
-      noteIdList: [noteId],
-      color: color
-    };
+    const payload = { noteIdList: [noteId], color };
 
     this.notesService.changeNoteColor(payload).subscribe({
       next: () => {
         console.log('Color updated to:', color);
         this.color = color;
       },
-      error: (err: any) => {
+      error: (err) => {
         console.error('Color change failed:', err);
-      }
+      },
     });
 
     this.showColorPalette = false;
   }
 
   onArchive() {
-    const payload = {
-      noteIdList: [this.id],
-      isArchived: true,
-    };
+    const payload = { noteIdList: [this.id], isArchived: true };
 
     this.notesService.archiveNote(payload).subscribe({
       next: () => {
@@ -108,6 +99,21 @@ export class NoteCardComponent {
       },
     });
   }
+
+  onUnarchive() {
+  const payload = { noteIdList: [this.id || this.noteId], isArchived: false };
+
+  this.notesService.archiveNote(payload).subscribe({
+    next: () => {
+      console.log('Note unarchived');
+      this.unarchived.emit(); // ✅ properly emits to parent
+    },
+    error: (err) => {
+      console.error('Error unarchiving note:', err);
+    },
+  });
+}
+
 
   togglePin(event: MouseEvent) {
     event.stopPropagation();
@@ -186,26 +192,23 @@ export class NoteCardComponent {
 
   highlight(text: string): string {
     if (!this.searchTerm) return text;
-
     const regex = new RegExp(`(${this.searchTerm})`, 'gi');
     return text.replace(regex, '<mark>$1</mark>');
   }
 
- onCardClick(event: MouseEvent) {
-  // Prevent if the click is on a button or icon inside the card
-  const target = event.target as HTMLElement;
-  const blockedTags = ['MAT-ICON', 'BUTTON'];
+  onCardClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    const blockedTags = ['MAT-ICON', 'BUTTON'];
+    if (blockedTags.includes(target.tagName)) return;
 
-  if (blockedTags.includes(target.tagName)) return;
-
-  if (this.context !== 'trash') {
-    this.editNoteClicked.emit({
-      id: this.id,
-      title: this.title,
-      description: this.description,
-      color: this.color,
-      isPined: this.isPined
-    });
+    if (this.context !== 'trash') {
+      this.editNoteClicked.emit({
+        id: this.id,
+        title: this.title,
+        description: this.description,
+        color: this.color,
+        isPined: this.isPined
+      });
+    }
   }
-}
 }

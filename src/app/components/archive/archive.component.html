@@ -17,11 +17,15 @@
 >
   <app-note-card
     *ngFor="let note of archivedNotes"
+    [id]="note.id"
     [title]="note.title"
     [description]="note.description"
-    [noteId]="note.id"
     [color]="note.color"
-    (archived)="loadArchivedNotes()"
+    [isArchived]="note.isArchived"
+    [context]="'archive'"
+    [ngClass]="viewMode"
+    (unarchived)="onNoteUnarchived()"
+    (trash)="onNoteUnarchived()"
   ></app-note-card>
 </div>
 
@@ -32,12 +36,14 @@
 >
   <app-note-card
     *ngFor="let note of archivedNotes"
+    [id]="note.id"
     [title]="note.title"
     [description]="note.description"
-    [noteId]="note.id"
     [color]="note.color"
-    (archived)="loadArchivedNotes()"
+    [isArchived]="note.isArchived"
+    [context]="'archive'"
     [ngClass]="viewMode"
-     (trash)="loadArchivedNotes()"
+    (unarchived)="onNoteUnarchived()"
+    (trash)="onNoteUnarchived()"
   ></app-note-card>
 </div>

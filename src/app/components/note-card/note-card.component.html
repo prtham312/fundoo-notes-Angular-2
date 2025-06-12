@@ -16,7 +16,10 @@
   <!-- Title and Pin -->
   <div class="note-header">
     <strong class="note-title-text" [innerHTML]="highlight(title)"></strong>
+
+    <!-- ❌ Hide Pin in archive & trash -->
     <mat-icon
+      *ngIf="context !== 'archive' && context !== 'trash'"
       fontSet="material-symbols-outlined"
       class="pin-icon"
       (click)="togglePin($event); $event.stopPropagation()"
@@ -48,13 +51,17 @@
         >delete_forever</mat-icon>
       </ng-container>
 
-      <!-- Non-trash icons -->
+      <!-- Archive & Notes Mode: Full icons -->
       <ng-template #normalIcons>
+
+        <!-- Color Palette -->
         <div class="palette-container">
           <mat-icon
             fontSet="material-symbols-outlined"
             (click)="toggleColorPalette(); $event.stopPropagation()"
+            matTooltip="Background options"
           >palette</mat-icon>
+
           <div class="color-palette" *ngIf="showColorPalette">
             <div
               class="color-circle"
@@ -65,11 +72,28 @@
           </div>
         </div>
 
-        <mat-icon fontSet="material-symbols-outlined" (click)="$event.stopPropagation()">add_alert</mat-icon>
-        <mat-icon fontSet="material-symbols-outlined" (click)="$event.stopPropagation()">person_add</mat-icon>
-        <mat-icon fontSet="material-symbols-outlined" (click)="$event.stopPropagation()">image</mat-icon>
-        <mat-icon fontSet="material-symbols-outlined" (click)="onArchive(); $event.stopPropagation()">archive</mat-icon>
+        <!-- Common Icons -->
+        <mat-icon fontSet="material-symbols-outlined" (click)="$event.stopPropagation()" matTooltip="Remind me">add_alert</mat-icon>
+        <mat-icon fontSet="material-symbols-outlined" (click)="$event.stopPropagation()" matTooltip="Collaborator">person_add</mat-icon>
+        <mat-icon fontSet="material-symbols-outlined" (click)="$event.stopPropagation()" matTooltip="Add image">image</mat-icon>
 
+        <!-- Archive/Unarchive -->
+        <mat-icon
+          *ngIf="context === 'archive'; else archiveBtn"
+          fontSet="material-symbols-outlined"
+          (click)="onUnarchive(); $event.stopPropagation()"
+          matTooltip="Unarchive"
+        >unarchive</mat-icon>
+
+        <ng-template #archiveBtn>
+          <mat-icon
+            fontSet="material-symbols-outlined"
+            (click)="onArchive(); $event.stopPropagation()"
+            matTooltip="Archive"
+          >archive</mat-icon>
+        </ng-template>
+
+        <!-- More Menu -->
         <button
           mat-icon-button
           [matMenuTriggerFor]="moreMenu"
