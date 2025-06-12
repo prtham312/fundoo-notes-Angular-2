@@ -63,18 +63,29 @@ export class DashboardComponent implements OnInit {
       }
     });
 
+    // 🟡 Detect initial route
     const currentUrl = this.router.url;
     const lastSegment = currentUrl.split('/').pop();
     this.currentSection = lastSegment || 'notes';
 
+    // ✅ Only fetch if starting directly in Notes
+    if (this.currentSection === 'notes') {
+      this.fetchNotesFromAPI();
+    }
+
+    // 🟡 Router change — fetch only when entering Notes
     this.router.events
       .pipe(filter((e) => e instanceof NavigationEnd))
       .subscribe((e: any) => {
         const updatedSegment = e.urlAfterRedirects.split('/').pop();
+
+        if (this.currentSection !== updatedSegment && updatedSegment === 'notes') {
+          console.log('📥 Switched to Notes — fetching');
+          this.fetchNotesFromAPI();
+        }
+
         this.currentSection = updatedSegment;
       });
-
-    this.fetchNotesFromAPI(); // ✅ Initial fetch
   }
 
   toggleViewMode() {
@@ -87,10 +98,7 @@ export class DashboardComponent implements OnInit {
     this.notesService.getAllNotes().subscribe({
       next: (res: any) => {
         const all = res.data?.data || [];
-        const visible = all
-          .filter((n: any) => !n.isArchived && !n.isDeleted)
-          .sort((a: any, b: any) => new Date(b.createdDateTime).getTime() - new Date(a.createdDateTime).getTime());
-
+        const visible = all.filter((n: any) => !n.isArchived && !n.isDeleted);
         this.pinnedNotes = visible.filter((n: any) => n.isPined);
         this.otherNotes = visible.filter((n: any) => !n.isPined);
       },
@@ -98,23 +106,18 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  onNoteCreated(note?: any) {
-    console.log('📥 Note received in dashboard:', note);
-    if (!note.title && note.note?.title) note = { id: note.id, ...note.note };
-
-  if (note?.title) {
-    if (note.isPined) {
-      this.pinnedNotes.unshift(note);
-    } else {
-      this.otherNotes.unshift(note);
+  onNoteCreated(note: any) {
+    if (note?.title) {
+      if (note.isPined) {
+        this.pinnedNotes.unshift(note);
+      } else {
+        this.otherNotes.unshift(note);
+      }
     }
-  } else {
-    console.warn('🚨 Ignored note (no title)', note);
-  }
   }
 
   onNoteArchived() {
-    this.fetchNotesFromAPI(); // Only reload if needed
+    this.fetchNotesFromAPI(); // For archive/trash updates
   }
 
   get sidenavOpened(): boolean {
