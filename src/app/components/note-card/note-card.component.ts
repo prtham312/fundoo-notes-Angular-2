@@ -155,9 +155,9 @@ private moveToTrash(noteIdList: string[], noteId: string) {
     next: () => {
       console.log('Moved to trash');
       this.trash.emit();
-      this.trashed.emit(noteId);
+      this.trashed.emit(noteId); // ✅ emits noteId to parent
     },
-    error: (err) => console.error('Trash API error', err)
+    error: (err) => console.error('Trash API error', err),
   });
 }
 

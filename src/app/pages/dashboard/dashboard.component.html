@@ -43,6 +43,7 @@
               (pinToggled)="fetchNotesFromAPI()"
               (archived)="onNoteArchived()"
               [ngClass]="viewMode"
+               (trashed)="onNoteTrashed(note.id)"
             ></app-note-card>
           </div>
         </div>
@@ -61,6 +62,7 @@
               (pinToggled)="fetchNotesFromAPI()"
               (archived)="onNoteArchived()"
               [ngClass]="viewMode"
+               (trashed)="onNoteTrashed(note.id)"
             ></app-note-card>
           </div>
         </div>
