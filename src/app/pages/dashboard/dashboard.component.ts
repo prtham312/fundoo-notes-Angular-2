@@ -7,7 +7,7 @@ import { NoteCardComponent } from 'src/app/components/note-card/note-card.compon
 import { NoteInputComponent } from 'src/app/components/note-input/note-input.component';
 import { MatIconModule } from '@angular/material/icon';
 import { NotesService } from 'src/app/services/notes/notes.service';
-import { Router, NavigationEnd, RouterModule, ActivatedRoute } from '@angular/router';
+import { Router, NavigationEnd, RouterModule } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { ArchiveComponent } from 'src/app/components/archive/archive.component';
 import { TrashComponent } from 'src/app/components/trash/trash.component';
@@ -34,6 +34,12 @@ export class DashboardComponent implements OnInit {
   pinnedNotes: any[] = [];
   otherNotes: any[] = [];
 
+  filteredPinned: any[] = [];
+  filteredNotes: any[] = [];
+
+  searchTerm: string = '';
+  searching: boolean = false;
+
   isSidenavOpen = false;
   isHovered = false;
   currentSection = 'notes';
@@ -42,8 +48,7 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private notesService: NotesService,
-    private router: Router,
-    private route: ActivatedRoute
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -63,24 +68,20 @@ export class DashboardComponent implements OnInit {
       }
     });
 
-    // 🟡 Detect initial route
     const currentUrl = this.router.url;
     const lastSegment = currentUrl.split('/').pop();
     this.currentSection = lastSegment || 'notes';
 
-    // ✅ Only fetch if starting directly in Notes
     if (this.currentSection === 'notes') {
       this.fetchNotesFromAPI();
     }
 
-    // 🟡 Router change — fetch only when entering Notes
     this.router.events
       .pipe(filter((e) => e instanceof NavigationEnd))
       .subscribe((e: any) => {
         const updatedSegment = e.urlAfterRedirects.split('/').pop();
 
-        if (this.currentSection !== updatedSegment && updatedSegment === 'notes') {
-          console.log('📥 Switched to Notes — fetching');
+        if (updatedSegment === 'notes' && updatedSegment !== this.currentSection) {
           this.fetchNotesFromAPI();
         }
 
@@ -99,27 +100,76 @@ export class DashboardComponent implements OnInit {
       next: (res: any) => {
         const all = res.data?.data || [];
         const visible = all
-        .filter((n: any) => !n.isArchived && !n.isDeleted)
-        .reverse()
+          .filter((n: any) => !n.isArchived && !n.isDeleted)
+          .reverse();
+
         this.pinnedNotes = visible.filter((n: any) => n.isPined);
         this.otherNotes = visible.filter((n: any) => !n.isPined);
+
+        if (this.searching) {
+          this.searchNotes();
+        }
       },
       error: (err) => console.error('Error fetching notes:', err),
     });
   }
 
   onNoteCreated(note: any) {
-    if (note?.title) {
-      if (note.isPined) {
-        this.pinnedNotes.unshift(note);
-      } else {
-        this.otherNotes.unshift(note);
-      }
+    if (!note?.title) return;
+
+    if (note.isPined) {
+      this.pinnedNotes.unshift(note);
+    } else {
+      this.otherNotes.unshift(note);
     }
+
+    if (this.searching) this.searchNotes();
   }
 
   onNoteArchived() {
-    this.fetchNotesFromAPI(); // For archive/trash updates
+    this.fetchNotesFromAPI();
+  }
+
+  onNoteTrashed(noteId: string) {
+    this.pinnedNotes = this.pinnedNotes.filter(note => note.id !== noteId);
+    this.otherNotes = this.otherNotes.filter(note => note.id !== noteId);
+    if (this.searching) this.searchNotes();
+  }
+
+  onSearch(term: string) {
+    this.searchTerm = term.trim();
+    this.searching = !!this.searchTerm;
+
+    if (this.searching) {
+      this.searchNotes();
+    } else {
+      this.filteredPinned = [];
+      this.filteredNotes = [];
+    }
+  }
+
+  searchNotes() {
+    const searchLower = this.searchTerm.toLowerCase();
+
+    this.filteredPinned = this.pinnedNotes.filter(
+      note =>
+        note.title?.toLowerCase().includes(searchLower) ||
+        note.description?.toLowerCase().includes(searchLower)
+    );
+
+    this.filteredNotes = this.otherNotes.filter(
+      note =>
+        note.title?.toLowerCase().includes(searchLower) ||
+        note.description?.toLowerCase().includes(searchLower)
+    );
+  }
+
+  highlight(text: string): string {
+    if (!this.searching || !this.searchTerm) return text;
+
+    const escaped = this.searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(`(${escaped})`, 'gi');
+    return text.replace(regex, '<mark>$1</mark>');
   }
 
   get sidenavOpened(): boolean {
@@ -133,10 +183,4 @@ export class DashboardComponent implements OnInit {
   onMouseLeaveSidenav() {
     this.isHovered = false;
   }
-
-  onNoteTrashed(noteId: string) {
-  this.pinnedNotes = this.pinnedNotes.filter(note => note.id !== noteId);
-  this.otherNotes = this.otherNotes.filter(note => note.id !== noteId);
-}
-
 }

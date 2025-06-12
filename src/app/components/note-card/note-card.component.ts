@@ -24,11 +24,6 @@ export class NoteCardComponent {
 
   constructor(private notesService: NotesService) {}
 
-  toggleSelect(event: MouseEvent) {
-    event.stopPropagation();
-    this.isSelected = !this.isSelected;
-  }
-
   // ✅ Inputs
   @Input() noteId!: string;
   @Input() title: string = '';
@@ -39,18 +34,16 @@ export class NoteCardComponent {
   @Input() isArchived: boolean = false;
   @Input() isDeleted: boolean = false;
   @Input() context: 'notes' | 'archive' | 'trash' = 'notes';
+  @Input() searchTerm: string = '';
 
-  // ✅ Outputs
   @Output() archived = new EventEmitter<void>();
   @Output() pinToggled = new EventEmitter<void>();
   @Output() restored = new EventEmitter<void>();
   @Output() deletedForever = new EventEmitter<void>();
-  @Output() trash = new EventEmitter<void>();          // old one, still used elsewhere
-  @Output() trashed = new EventEmitter<string>();      // ✅ new one for Dashboard
+  @Output() trash = new EventEmitter<void>();
+  @Output() trashed = new EventEmitter<string>();
 
-  // ✅ Handle viewMode binding from dashboard
   private viewMode: string = 'grid';
-
   @Input() set ngClass(value: string) {
     this.viewMode = value;
   }
@@ -68,32 +61,35 @@ export class NoteCardComponent {
   lightColors = ['#fff', '#f28b82', '#fbbc04', '#fff475', '#ccff90', '#a7ffeb', '#cbf0f8'];
   showColorPalette = false;
 
+  toggleSelect(event: MouseEvent) {
+    event.stopPropagation();
+    this.isSelected = !this.isSelected;
+  }
+
   toggleColorPalette() {
     this.showColorPalette = !this.showColorPalette;
   }
 
   selectColor(color: string) {
-  const noteId = this.id || this.noteId;
-  const payload = {
-    noteIdList: [noteId],
-    color: color
-  };
+    const noteId = this.id || this.noteId;
+    const payload = {
+      noteIdList: [noteId],
+      color: color
+    };
 
-  this.notesService.changeNoteColor(payload).subscribe({
-    next: () => {
-      console.log('Color updated to:', color);
-      this.color = color; // update UI
-    },
-    error: (err : any) => {
-      console.error('Color change failed:', err);
-    }
-  });
+    this.notesService.changeNoteColor(payload).subscribe({
+      next: () => {
+        console.log('Color updated to:', color);
+        this.color = color;
+      },
+      error: (err: any) => {
+        console.error('Color change failed:', err);
+      }
+    });
 
-  this.showColorPalette = false;
-}
+    this.showColorPalette = false;
+  }
 
-
-  // ✅ Archive logic
   onArchive() {
     const payload = {
       noteIdList: [this.id],
@@ -111,7 +107,6 @@ export class NoteCardComponent {
     });
   }
 
-  // ✅ Pin toggle logic
   togglePin(event: MouseEvent) {
     event.stopPropagation();
 
@@ -133,35 +128,31 @@ export class NoteCardComponent {
     this.isPined = !this.isPined;
   }
 
- onTrash() {
-  const noteId = this.id || this.noteId;
-  const noteIdList = [noteId];
+  onTrash() {
+    const noteId = this.id || this.noteId;
+    const noteIdList = [noteId];
 
-  if (this.isArchived) {
-    // Only unarchive if it was archived
-    this.notesService.archiveNote({ noteIdList, isArchived: false }).subscribe({
-      next: () => {
-        this.moveToTrash(noteIdList, noteId);
-      },
-      error: (err) => console.error('Unarchive API error', err)
-    });
-  } else {
-    this.moveToTrash(noteIdList, noteId);
+    if (this.isArchived) {
+      this.notesService.archiveNote({ noteIdList, isArchived: false }).subscribe({
+        next: () => this.moveToTrash(noteIdList, noteId),
+        error: (err) => console.error('Unarchive API error', err),
+      });
+    } else {
+      this.moveToTrash(noteIdList, noteId);
+    }
   }
-}
 
-private moveToTrash(noteIdList: string[], noteId: string) {
-  this.notesService.trashNote({ noteIdList, isDeleted: true }).subscribe({
-    next: () => {
-      console.log('Moved to trash');
-      this.trash.emit();
-      this.trashed.emit(noteId); // ✅ emits noteId to parent
-    },
-    error: (err) => console.error('Trash API error', err),
-  });
-}
+  private moveToTrash(noteIdList: string[], noteId: string) {
+    this.notesService.trashNote({ noteIdList, isDeleted: true }).subscribe({
+      next: () => {
+        console.log('Moved to trash');
+        this.trash.emit();
+        this.trashed.emit(noteId);
+      },
+      error: (err) => console.error('Trash API error', err),
+    });
+  }
 
-  // ✅ Restore from trash
   onRestore() {
     const payload = {
       noteIdList: [this.id || this.noteId],
@@ -177,7 +168,6 @@ private moveToTrash(noteIdList: string[], noteId: string) {
     });
   }
 
-  // ✅ Delete forever
   onDeleteForever() {
     const payload = {
       noteIdList: [this.id || this.noteId],
@@ -190,5 +180,12 @@ private moveToTrash(noteIdList: string[], noteId: string) {
       },
       error: (err) => console.error('Delete forever error', err),
     });
+  }
+
+  highlight(text: string): string {
+    if (!this.searchTerm) return text;
+
+    const regex = new RegExp(`(${this.searchTerm})`, 'gi');
+    return text.replace(regex, '<mark>$1</mark>');
   }
 }

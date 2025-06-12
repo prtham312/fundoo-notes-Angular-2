@@ -7,9 +7,15 @@
     <span class="app-name">Keep</span>
   </div>
 
+  <!-- Desktop Search -->
   <div class="search-container desktop-search">
     <mat-icon>search</mat-icon>
-    <input matInput placeholder="   Search" />
+    <input
+      matInput
+      placeholder="   Search"
+      [(ngModel)]="searchTerm"
+      (input)="onSearch(searchTerm)"
+    />
   </div>
 
   <div class="right-section">
@@ -30,27 +36,31 @@
     </button>
 
     <button mat-icon-button>
-      <mat-icon fontSet="material-symbols-outlined" fontIcon="settings"
-        >settings</mat-icon
-      >
+      <mat-icon fontSet="material-symbols-outlined" fontIcon="settings">settings</mat-icon>
     </button>
 
     <span class="right-gap"></span>
 
     <button mat-icon-button>
-      <mat-icon fontSet="material-symbols-outlined" fontIcon="apps"
-        >apps</mat-icon
-      >
+      <mat-icon fontSet="material-symbols-outlined" fontIcon="apps">apps</mat-icon>
     </button>
 
-    <button mat-icon-button><mat-icon>account_circle</mat-icon></button>
+    <button mat-icon-button>
+      <mat-icon>account_circle</mat-icon>
+    </button>
   </div>
 </mat-toolbar>
 
+<!-- Mobile Search -->
 <div class="mobile-search-bar" *ngIf="mobileSearchOpen">
   <mat-icon>search</mat-icon>
-  <input matInput placeholder="Search" />
-  <button mat-icon-button (click)="mobileSearchOpen = false">
+  <input
+    matInput
+    placeholder="Search"
+    [(ngModel)]="searchTerm"
+    (input)="onSearch(searchTerm)"
+  />
+  <button mat-icon-button (click)="mobileSearchOpen = false; onSearch('')">
     <mat-icon>close</mat-icon>
   </button>
 </div>
