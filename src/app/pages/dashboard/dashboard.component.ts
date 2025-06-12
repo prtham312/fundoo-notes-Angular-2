@@ -7,7 +7,7 @@ import { NoteCardComponent } from 'src/app/components/note-card/note-card.compon
 import { NoteInputComponent } from 'src/app/components/note-input/note-input.component';
 import { MatIconModule } from '@angular/material/icon';
 import { NotesService } from 'src/app/services/notes/notes.service';
-import { Router, NavigationEnd, RouterModule } from '@angular/router';
+import { Router, NavigationEnd, RouterModule, ActivatedRoute } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { ArchiveComponent } from 'src/app/components/archive/archive.component';
 import { TrashComponent } from 'src/app/components/trash/trash.component';
@@ -25,7 +25,7 @@ import { TrashComponent } from 'src/app/components/trash/trash.component';
     MatIconModule,
     RouterModule,
     ArchiveComponent,
-    TrashComponent
+    TrashComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
@@ -42,7 +42,8 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private notesService: NotesService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -62,14 +63,20 @@ export class DashboardComponent implements OnInit {
       }
     });
 
-    this.fetchNotesFromAPI();
+    // ✅ Detect current section from URL on page load
+    const currentUrl = this.router.url;
+    const lastSegment = currentUrl.split('/').pop();
+    this.currentSection = lastSegment || 'notes';
 
-    this.router.events.pipe(
-      filter((e) => e instanceof NavigationEnd)
-    ).subscribe((e: any) => {
-      const lastSegment = e.urlAfterRedirects.split('/').pop();
-      this.currentSection = lastSegment;
-    });
+    // ✅ Watch for URL changes
+    this.router.events
+      .pipe(filter((e) => e instanceof NavigationEnd))
+      .subscribe((e: any) => {
+        const updatedSegment = e.urlAfterRedirects.split('/').pop();
+        this.currentSection = updatedSegment;
+      });
+
+    this.fetchNotesFromAPI();
   }
 
   toggleViewMode() {
@@ -80,21 +87,34 @@ export class DashboardComponent implements OnInit {
 
   fetchNotesFromAPI() {
     this.notesService.getAllNotes().subscribe({
-      next: (res: any) => {
-        const all = res.data?.data || [];
-        const visible = all.filter((n : any) => !n.isArchived && !n.isDeleted);
-        this.pinnedNotes = visible.filter((n:any) => n.isPined);
-        this.otherNotes = visible.filter((n:any) => !n.isPined);
-      },
-      error: (err) => console.error('Error fetching notes:', err)
-    });
+  next: (res: any) => {
+    const all = res.data?.data || [];
+    const visible = all
+      .filter((n: any) => !n.isArchived && !n.isDeleted)
+      .sort((a : any, b : any) => new Date(b.createdDateTime).getTime() - new Date(a.createdDateTime).getTime()); // 👈 newest first
+
+    this.pinnedNotes = visible.filter((n: any) => n.isPined);
+    this.otherNotes = visible.filter((n: any) => !n.isPined);
+  },
+  error: (err) => console.error('Error fetching notes:', err),
+});
+
   }
 
-
-
-  onNoteCreated(note: any) {
+  onNoteCreated(note?: any) {
     console.log('Note created event received:', note);
-    this.fetchNotesFromAPI();
+
+    // If note is provided, insert instantly
+    if (note?.title) {
+      if (note.isPined) {
+        this.pinnedNotes.unshift(note);
+      } else {
+        this.otherNotes.unshift(note);
+      }
+    } else {
+      // Otherwise, refetch all notes
+      this.fetchNotesFromAPI();
+    }
   }
 
   get sidenavOpened(): boolean {
@@ -110,7 +130,6 @@ export class DashboardComponent implements OnInit {
   }
 
   onNoteArchived() {
-    this.fetchNotesFromAPI(); // refresh to remove from list
+    this.fetchNotesFromAPI();
   }
-
 }
