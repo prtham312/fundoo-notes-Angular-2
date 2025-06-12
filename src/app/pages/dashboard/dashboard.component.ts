@@ -63,12 +63,10 @@ export class DashboardComponent implements OnInit {
       }
     });
 
-    // ✅ Detect current section from URL on page load
     const currentUrl = this.router.url;
     const lastSegment = currentUrl.split('/').pop();
     this.currentSection = lastSegment || 'notes';
 
-    // ✅ Watch for URL changes
     this.router.events
       .pipe(filter((e) => e instanceof NavigationEnd))
       .subscribe((e: any) => {
@@ -76,7 +74,7 @@ export class DashboardComponent implements OnInit {
         this.currentSection = updatedSegment;
       });
 
-    this.fetchNotesFromAPI();
+    this.fetchNotesFromAPI(); // ✅ Initial fetch
   }
 
   toggleViewMode() {
@@ -87,34 +85,36 @@ export class DashboardComponent implements OnInit {
 
   fetchNotesFromAPI() {
     this.notesService.getAllNotes().subscribe({
-  next: (res: any) => {
-    const all = res.data?.data || [];
-    const visible = all
-      .filter((n: any) => !n.isArchived && !n.isDeleted)
-      .sort((a : any, b : any) => new Date(b.createdDateTime).getTime() - new Date(a.createdDateTime).getTime()); // 👈 newest first
+      next: (res: any) => {
+        const all = res.data?.data || [];
+        const visible = all
+          .filter((n: any) => !n.isArchived && !n.isDeleted)
+          .sort((a: any, b: any) => new Date(b.createdDateTime).getTime() - new Date(a.createdDateTime).getTime());
 
-    this.pinnedNotes = visible.filter((n: any) => n.isPined);
-    this.otherNotes = visible.filter((n: any) => !n.isPined);
-  },
-  error: (err) => console.error('Error fetching notes:', err),
-});
-
+        this.pinnedNotes = visible.filter((n: any) => n.isPined);
+        this.otherNotes = visible.filter((n: any) => !n.isPined);
+      },
+      error: (err) => console.error('Error fetching notes:', err),
+    });
   }
 
   onNoteCreated(note?: any) {
-    console.log('Note created event received:', note);
+    console.log('📥 Note received in dashboard:', note);
+    if (!note.title && note.note?.title) note = { id: note.id, ...note.note };
 
-    // If note is provided, insert instantly
-    if (note?.title) {
-      if (note.isPined) {
-        this.pinnedNotes.unshift(note);
-      } else {
-        this.otherNotes.unshift(note);
-      }
+  if (note?.title) {
+    if (note.isPined) {
+      this.pinnedNotes.unshift(note);
     } else {
-      // Otherwise, refetch all notes
-      this.fetchNotesFromAPI();
+      this.otherNotes.unshift(note);
     }
+  } else {
+    console.warn('🚨 Ignored note (no title)', note);
+  }
+  }
+
+  onNoteArchived() {
+    this.fetchNotesFromAPI(); // Only reload if needed
   }
 
   get sidenavOpened(): boolean {
@@ -127,9 +127,5 @@ export class DashboardComponent implements OnInit {
 
   onMouseLeaveSidenav() {
     this.isHovered = false;
-  }
-
-  onNoteArchived() {
-    this.fetchNotesFromAPI();
   }
 }

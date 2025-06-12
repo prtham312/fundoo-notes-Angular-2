@@ -20,7 +20,8 @@ import { IconListComponent } from '../icon-list/icon-list.component';
   styleUrls: ['./note-input.component.css'],
 })
 export class NoteInputComponent {
-  @Output() noteAdded = new EventEmitter<any>(); 
+  @Output() noteAdded = new EventEmitter<any>(); // renamed and used properly
+
   isExpanded = false;
   title = '';
   description = '';
@@ -42,31 +43,36 @@ export class NoteInputComponent {
   }
 
   collapse() {
-    if (this.title.trim() || this.description.trim()) {
-      const payload = {
-        title: this.title.trim(),
-        description: this.description.trim(),
-        isPinned: false,
-        isArchived: false,
-        isDeleted: false,
-        color: this.backgroundColor,
-      };
+  if (this.title.trim() || this.description.trim()) {
+    const payload = {
+      title: this.title.trim(),
+      description: this.description.trim(),
+      isPinned: false,
+      isArchived: false,
+      isDeleted: false,
+      color: this.backgroundColor,
+    };
 
-      this.notesService.addNote(payload).subscribe({
-        next: (res : any) => {
-          this.noteAdded.emit(res.data); 
-          this.cdr.detectChanges();
-          this.resetFields();
-        },
-        error: (err) => {
-          console.error('API failed:', err);
-          this.resetFields();
-        },
-      });
-    } else {
-      this.resetFields();
-    }
+    this.notesService.addNote(payload).subscribe({
+      next: () => {
+  const newNote = {
+    title: this.title.trim(),
+    description: this.description.trim(),
+    color: this.backgroundColor,
+    isPined: false,
+    isArchived: false,
+    isDeleted: false,
+  };
+  console.log('✅ Emitting new note from local payload:', newNote);
+  this.noteAdded.emit(newNote);
+  this.resetFields();
+},
+    });
+  } else {
+    this.resetFields(); // collapse even if empty
   }
+}
+
 
   resetFields() {
     this.title = '';
